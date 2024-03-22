@@ -1,31 +1,103 @@
 package br.edu.infnet.BibliotecaInfnet.model.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
-
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "tb_livro")
+
 public class Livro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID id;
-    public Boolean emprestado;
-    public String titulo;
-    public String autor;
-    public String genero;
-    public String isbn;
-    public String sinopse;
-    public Usuario dono;
-    public List<Usuario> listaEspera;
-    public List<Emprestimo> historico;
+    private UUID id;
+    private Boolean emprestado;
+    private String titulo;
+    private String autor;
+    private String genero;
+    private String isbn;
+    private String sinopse;
 
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+    @OneToOne( mappedBy = "livro", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Emprestimo emprestimo;
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Boolean getEmprestado() {
+        return emprestado;
+    }
+
+    public void setEmprestado(Boolean emprestado) {
+        this.emprestado = emprestado;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+
+    public Emprestimo getEmprestimo() {
+        return emprestimo;
+    }
+
+    public void setEmprestimo(Emprestimo emprestimo) {
+        this.emprestimo = emprestimo;
+    }
 }
