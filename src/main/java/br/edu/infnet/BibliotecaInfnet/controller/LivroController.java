@@ -2,6 +2,7 @@ package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping
+@Tag(name = "Biblioteca INFNET - LivroController")
 public class LivroController {
     @Autowired
     private LivroService livroService;
