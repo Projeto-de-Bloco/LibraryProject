@@ -1,0 +1,222 @@
+openapi: "3.0.3"
+info:
+  title: "LibraryProject API"
+  description: "LibraryProject API"
+  version: "1.0.0"
+servers:
+  - url: "https://LibraryProject"
+tags:
+  - name: "Biblioteca INFNET - UsuarioController"
+paths:
+  /api/v1/usuarios:
+    get:
+      summary: "GET api/v1/usuarios"
+      operationId: "getAllUsers"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Usuario"
+    post:
+      summary: "POST api/v1/usuarios"
+      operationId: "addUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Usuario"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Usuario"
+  /api/v1/usuarios/{id}:
+    get:
+      summary: "GET api/v1/usuarios/{id}"
+      operationId: "getUserById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Usuario"
+    put:
+      summary: "PUT api/v1/usuarios/{id}"
+      operationId: "updateUser"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Usuario"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Usuario"
+    delete:
+      summary: "DELETE api/v1/usuarios/{id}"
+      operationId: "deleteUser"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+                enum:
+                  - "CONTINUE"
+                  - "SWITCHING_PROTOCOLS"
+                  - "PROCESSING"
+                  - "EARLY_HINTS"
+                  - "CHECKPOINT"
+                  - "OK"
+                  - "CREATED"
+                  - "ACCEPTED"
+                  - "NON_AUTHORITATIVE_INFORMATION"
+                  - "NO_CONTENT"
+                  - "RESET_CONTENT"
+                  - "PARTIAL_CONTENT"
+                  - "MULTI_STATUS"
+                  - "ALREADY_REPORTED"
+                  - "IM_USED"
+                  - "MULTIPLE_CHOICES"
+                  - "MOVED_PERMANENTLY"
+                  - "FOUND"
+                  - "MOVED_TEMPORARILY"
+                  - "SEE_OTHER"
+                  - "NOT_MODIFIED"
+                  - "USE_PROXY"
+                  - "TEMPORARY_REDIRECT"
+                  - "PERMANENT_REDIRECT"
+                  - "BAD_REQUEST"
+                  - "UNAUTHORIZED"
+                  - "PAYMENT_REQUIRED"
+                  - "FORBIDDEN"
+                  - "NOT_FOUND"
+                  - "METHOD_NOT_ALLOWED"
+                  - "NOT_ACCEPTABLE"
+                  - "PROXY_AUTHENTICATION_REQUIRED"
+                  - "REQUEST_TIMEOUT"
+                  - "CONFLICT"
+                  - "GONE"
+                  - "LENGTH_REQUIRED"
+                  - "PRECONDITION_FAILED"
+                  - "PAYLOAD_TOO_LARGE"
+                  - "REQUEST_ENTITY_TOO_LARGE"
+                  - "URI_TOO_LONG"
+                  - "REQUEST_URI_TOO_LONG"
+                  - "UNSUPPORTED_MEDIA_TYPE"
+                  - "REQUESTED_RANGE_NOT_SATISFIABLE"
+                  - "EXPECTATION_FAILED"
+                  - "I_AM_A_TEAPOT"
+                  - "INSUFFICIENT_SPACE_ON_RESOURCE"
+                  - "METHOD_FAILURE"
+                  - "DESTINATION_LOCKED"
+                  - "UNPROCESSABLE_ENTITY"
+                  - "LOCKED"
+                  - "FAILED_DEPENDENCY"
+                  - "TOO_EARLY"
+                  - "UPGRADE_REQUIRED"
+                  - "PRECONDITION_REQUIRED"
+                  - "TOO_MANY_REQUESTS"
+                  - "REQUEST_HEADER_FIELDS_TOO_LARGE"
+                  - "UNAVAILABLE_FOR_LEGAL_REASONS"
+                  - "INTERNAL_SERVER_ERROR"
+                  - "NOT_IMPLEMENTED"
+                  - "BAD_GATEWAY"
+                  - "SERVICE_UNAVAILABLE"
+                  - "GATEWAY_TIMEOUT"
+                  - "HTTP_VERSION_NOT_SUPPORTED"
+                  - "VARIANT_ALSO_NEGOTIATES"
+                  - "INSUFFICIENT_STORAGE"
+                  - "LOOP_DETECTED"
+                  - "BANDWIDTH_LIMIT_EXCEEDED"
+                  - "NOT_EXTENDED"
+                  - "NETWORK_AUTHENTICATION_REQUIRED"
+components:
+  schemas:
+    Emprestimo:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        ativo:
+          type: "boolean"
+        livro:
+          $ref: "#/components/schemas/Livro"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        dataVencimento:
+          type: "string"
+          format: "date-time"
+    Livro:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        emprestado:
+          type: "boolean"
+        titulo:
+          type: "string"
+        autor:
+          type: "string"
+        genero:
+          type: "string"
+        isbn:
+          type: "string"
+        sinopse:
+          type: "string"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        emprestimo:
+          $ref: "#/components/schemas/Emprestimo"
+    Usuario:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        nome:
+          type: "string"
+        email:
+          type: "string"
+        senha:
+          type: "string"
+        meusLivros:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Livro"
