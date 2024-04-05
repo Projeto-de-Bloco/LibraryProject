@@ -4,23 +4,33 @@ info:
   description: "LibraryProject API"
   version: "1.0.0"
 servers:
-  - url: "https://LibraryProject"
+  - url: "http://localhost:8080"
 tags:
   - name: "Biblioteca INFNET - UsuarioController"
 paths:
   /api/v1/usuarios:
     get:
-      summary: "GET api/v1/usuarios"
+      summary: "Return all users"
       operationId: "getAllUsers"
       responses:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/Usuario"
+                  properties:
+                    id:
+                      type: string
+                      example: 2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1
+                    nome:
+                      type: string
+                      example: pedro
+                    email:
+                      type: string
+                      example: pedro@gmail.com
+
     post:
       summary: "POST api/v1/usuarios"
       operationId: "addUser"

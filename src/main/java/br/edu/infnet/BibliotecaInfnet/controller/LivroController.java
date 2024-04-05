@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/v1")
 @Tag(name = "Biblioteca INFNET - LivroController")
 public class LivroController {
     @Autowired
     private LivroService livroService;
 
-    @PostMapping
+    @PostMapping("/livros/{id}")
     public ResponseEntity<Object> criarLivro(@RequestBody Livro livro) {
         ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
 
@@ -26,7 +26,7 @@ public class LivroController {
         return retorno;
     }
 
-    @GetMapping()
+    @GetMapping("/livros")
     public ResponseEntity<Object> listarLivros() {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -41,7 +41,7 @@ public class LivroController {
         return retorno;
     }
 
-    @GetMapping(path = "{autor}")
+    @GetMapping("/livros/{autor}")
     public ResponseEntity<Object> listarPorAutor(@PathVariable String autor) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -54,7 +54,7 @@ public class LivroController {
         }
         return retorno;
     }
-    @GetMapping(path = "{genero}")
+    @GetMapping("/livros/{genero}")
     public ResponseEntity<Object> listarPorGenero(@PathVariable String genero) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -67,7 +67,7 @@ public class LivroController {
         }
         return retorno;
     }
-    @GetMapping(path = "{titulo}")
+    @GetMapping("/livros/{titulo}")
     public ResponseEntity<Object> listarPorTitulo(@PathVariable String titulo) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -80,7 +80,7 @@ public class LivroController {
         }
         return retorno;
     }
-    @GetMapping(path = "{id}")
+    @GetMapping("/livros/{id}")
     public ResponseEntity<Object> listarPorId(@PathVariable UUID id) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -92,7 +92,7 @@ public class LivroController {
         return retorno;
     }
 
-    @PutMapping(path = "{id}")
+    @PutMapping("/livros/{id}")
     public ResponseEntity<Object> atualizarLivro(@PathVariable UUID id, @RequestBody Livro livro) {
         ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
 
@@ -110,7 +110,7 @@ public class LivroController {
         return retorno;
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/livros/{id}")
     public void deletarLivroById(@PathVariable UUID id) {
         Livro livroDeletado = livroService.findById(id);
         if(livroDeletado != null) {
