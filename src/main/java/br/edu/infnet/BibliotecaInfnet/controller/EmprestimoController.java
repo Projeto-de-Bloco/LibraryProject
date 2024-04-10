@@ -17,7 +17,7 @@ import java.util.UUID;
 public class EmprestimoController {
 
     @Autowired
-    EmprestimoService emprestimoService;
+    private EmprestimoService emprestimoService;
 
     @PostMapping
     public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) {
@@ -73,7 +73,7 @@ public class EmprestimoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Emprestimo> deleteEmprestimo(UUID id) {
+    public ResponseEntity<Emprestimo> deleteEmprestimo(@PathVariable UUID id) {
         emprestimoService.deleteEmprestimoById(id);
         return new ResponseEntity(HttpStatus.OK);
     }

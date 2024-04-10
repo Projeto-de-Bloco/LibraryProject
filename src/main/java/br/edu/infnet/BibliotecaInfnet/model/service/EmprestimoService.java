@@ -12,7 +12,7 @@ import java.util.UUID;
 public class EmprestimoService {
 
     @Autowired
-    EmprestimoRepository emprestimoRepository;
+    private EmprestimoRepository emprestimoRepository;
 
     public Emprestimo criarEmprestimo(Emprestimo emprestimo) {
         return emprestimoRepository.save(emprestimo);
