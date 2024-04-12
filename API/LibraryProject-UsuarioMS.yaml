@@ -16,20 +16,9 @@ paths:
         "200":
           description: "OK"
           content:
-            application/json:
+            '*/*':
               schema:
-                type: "array"
-                items:
-                  properties:
-                    id:
-                      type: string
-                      example: 2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1
-                    nome:
-                      type: string
-                      example: pedro
-                    email:
-                      type: string
-                      example: pedro@gmail.com
+                $ref: "#/components/schemas/Usuario"
 
     post:
       summary: "POST api/v1/usuarios"

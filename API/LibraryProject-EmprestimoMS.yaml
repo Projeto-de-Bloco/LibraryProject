@@ -4,7 +4,7 @@ info:
   description: "LibraryProject API"
   version: "1.0.0"
 servers:
-  - url: "https://localhost:8080/emprestimos"
+  - url: "http://localhost:8080"
 tags:
   - name: "Biblioteca INFNET - EmprestimoController"
 paths:
