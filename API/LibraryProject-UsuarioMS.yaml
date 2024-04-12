@@ -8,7 +8,7 @@ servers:
 tags:
   - name: "Biblioteca INFNET - UsuarioController"
 paths:
-  /api/v1/usuarios:
+  /api/v1/usuarios: 
     get:
       summary: "Return all users"
       operationId: "getAllUsers"
