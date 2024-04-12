@@ -1,4 +1,4 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
   title: "LibraryProject API"
   description: "LibraryProject API"
@@ -10,7 +10,7 @@ tags:
 paths:
   /api/v1/usuarios:
     get:
-      summary: "Return all users"
+      summary: "GET api/v1/usuarios"
       operationId: "getAllUsers"
       responses:
         "200":
@@ -18,8 +18,9 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Usuario"
-
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Usuario"
     post:
       summary: "POST api/v1/usuarios"
       operationId: "addUser"

@@ -1,4 +1,4 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
   title: "LibraryProject API"
   description: "LibraryProject API"
@@ -6,17 +6,21 @@ info:
 servers:
   - url: "http://localhost:8080"
 tags:
-  - name: "Biblioteca INFNET - EmprestimoController"
+  - name: "Biblioteca INFNET - LivroController"
 paths:
-  /emprestimos:
+  /api/v1/livros/{id}:
     post:
-      summary: "POST emprestimos"
-      operationId: "criarEmprestimo"
+      summary: "POST api/v1/livros/{id}"
+      operationId: "criarLivro"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: false
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Emprestimo"
+              $ref: "#/components/schemas/Livro"
         required: true
       responses:
         "200":
@@ -24,23 +28,10 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Emprestimo"
+                $ref: "#/components/schemas/Object"
     get:
-      summary: "GET emprestimos"
-      operationId: "getAllEmprestimos"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{id}:
-    get:
-      summary: "GET emprestimos/{id}"
-      operationId: "getEmprestimoById"
+      summary: "GET api/v1/livros/{id}"
+      operationId: "listarPorId"
       parameters:
         - name: "id"
           in: "path"
@@ -54,10 +45,10 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Emprestimo"
+                $ref: "#/components/schemas/Object"
     put:
-      summary: "PUT emprestimos/{id}"
-      operationId: "updateEmprestimo"
+      summary: "PUT api/v1/livros/{id}"
+      operationId: "atualizarLivro"
       parameters:
         - name: "id"
           in: "path"
@@ -69,7 +60,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Emprestimo"
+              $ref: "#/components/schemas/Livro"
         required: true
       responses:
         "200":
@@ -77,10 +68,10 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Emprestimo"
+                $ref: "#/components/schemas/Object"
     delete:
-      summary: "DELETE emprestimos/{id}"
-      operationId: "deleteEmprestimo"
+      summary: "DELETE api/v1/livros/{id}"
+      operationId: "deletarLivroById"
       parameters:
         - name: "id"
           in: "path"
@@ -91,46 +82,68 @@ paths:
       responses:
         "200":
           description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{usuario}:
+  /api/v1/livros:
     get:
-      summary: "GET emprestimos/{usuario}"
-      operationId: "getEmprestimoByUsuario"
-      parameters:
-        - name: "usuario"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-            format: "uuid"
+      summary: "GET api/v1/livros"
+      operationId: "listarLivros"
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{livro}:
+                $ref: "#/components/schemas/Object"
+  /api/v1/livros/{autor}:
     get:
-      summary: "GET emprestimos/{livro}"
-      operationId: "getEmprestimoByLivro"
+      summary: "GET api/v1/livros/{autor}"
+      operationId: "listarPorAutor"
       parameters:
-        - name: "livro"
+        - name: "autor"
           in: "path"
           required: true
           schema:
             type: "string"
-            format: "uuid"
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Emprestimo"
+                $ref: "#/components/schemas/Object"
+  /api/v1/livros/{genero}:
+    get:
+      summary: "GET api/v1/livros/{genero}"
+      operationId: "listarPorGenero"
+      parameters:
+        - name: "genero"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  /api/v1/livros/{titulo}:
+    get:
+      summary: "GET api/v1/livros/{titulo}"
+      operationId: "listarPorTitulo"
+      parameters:
+        - name: "titulo"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
 components:
   schemas:
     Usuario:
@@ -149,6 +162,21 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/Livro"
+    Emprestimo:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        ativo:
+          type: "boolean"
+        livro:
+          $ref: "#/components/schemas/Livro"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        dataVencimento:
+          type: "string"
+          format: "date-time"
     Livro:
       type: "object"
       properties:
@@ -171,18 +199,6 @@ components:
           $ref: "#/components/schemas/Usuario"
         emprestimo:
           $ref: "#/components/schemas/Emprestimo"
-    Emprestimo:
+    Object:
       type: "object"
-      properties:
-        id:
-          type: "string"
-          format: "uuid"
-        ativo:
-          type: "boolean"
-        livro:
-          $ref: "#/components/schemas/Livro"
-        usuario:
-          $ref: "#/components/schemas/Usuario"
-        dataVencimento:
-          type: "string"
-          format: "date-time"
+      properties: { }

@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/emprestimos", produces = {"application/json"})
+@RequestMapping("/api/v1")
 @Tag(name = "Biblioteca INFNET - EmprestimoController")
 public class EmprestimoController {
 
     @Autowired
     private EmprestimoService emprestimoService;
 
-    @PostMapping
+    @PostMapping("/emprestimo")
     public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) {
         Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimo);
         if (emprestimoCriado != null) {
@@ -29,13 +29,13 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/emprestimo")
     public ResponseEntity<List<Emprestimo>> getAllEmprestimos() {
         List<Emprestimo> emprestimos = emprestimoService.getEmprestimos();
         return new ResponseEntity(emprestimos, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/emprestimo/{id}")
     public ResponseEntity<Emprestimo> getEmprestimoById(@PathVariable("id") UUID id) {
         Emprestimo emprestimo = emprestimoService.getEmprestimoById(id);
         if (emprestimo != null) {
@@ -45,7 +45,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/{usuario}")
+    @GetMapping("/emprestimo/{usuario}")
     public ResponseEntity<Emprestimo> getEmprestimoByUsuario(@PathVariable("usuario") UUID id_usuario) {
         List<Emprestimo> emprestimos = emprestimoService.getEmprestimoByUsuario(id_usuario);
         if (emprestimos != null) {
@@ -55,7 +55,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/{livro}")
+    @GetMapping("/emprestimo/{livro}")
     public ResponseEntity<Emprestimo> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
         List<Emprestimo> emprestimos = emprestimoService.getEmprestimoByLivro(id_livro);
         if (emprestimos != null) {
@@ -65,14 +65,14 @@ public class EmprestimoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/emprestimo/{id}")
     public  ResponseEntity<Emprestimo> updateEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) {
         Emprestimo emprestimoModificado = emprestimoService.getEmprestimoById(id);
         emprestimoService.updateEmprestimoById(emprestimoModificado);
         return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/emprestimo/{id}")
     public ResponseEntity<Emprestimo> deleteEmprestimo(@PathVariable UUID id) {
         emprestimoService.deleteEmprestimoById(id);
         return new ResponseEntity(HttpStatus.OK);
