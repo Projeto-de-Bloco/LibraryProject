@@ -14,13 +14,13 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/carrinhos", produces = {"application/json"})
+@RequestMapping("/api/v1")
 @Tag(name = "Biblioteca INFNET - CarrinhoController")
 public class CarrinhoController {
     @Autowired
     CarrinhoService service;
 
-    @PostMapping(value = "/{id}")
+    @PostMapping(value = "/carrinho/{id}")
     public ResponseEntity<Carrinho> criarCarrinho (@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = service.criarCarrinho(usuario_id);
@@ -30,7 +30,7 @@ public class CarrinhoController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/carrinho")
     public ResponseEntity<List<Carrinho>> getAll(){
 
         List<Carrinho> carrinhos = service.getCarrinhos();
@@ -43,7 +43,7 @@ public class CarrinhoController {
 
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "carrinho/{id}")
     public ResponseEntity<Carrinho> getById(@PathVariable("id") UUID id){
         try{
             Carrinho carrinho = service.getById(id);
@@ -53,7 +53,7 @@ public class CarrinhoController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "carrinho/{id}")
     public ResponseEntity deletarCarrinho(@PathVariable("id") UUID id){
         try {
             service.deletarCarrinho(id);

@@ -4,7 +4,7 @@ info:
   description: "LibraryProject API"
   version: "1.0.0"
 servers:
-  - url: "https://LibraryProject"
+  - url: "http://localhost:8080"
 tags:
   - name: "Biblioteca INFNET - LivroController"
 paths:
