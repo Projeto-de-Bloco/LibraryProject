@@ -1,0 +1,188 @@
+openapi: "3.0.3"
+info:
+  title: "LibraryProject API"
+  description: "LibraryProject API"
+  version: "1.0.0"
+servers:
+  - url: "https://localhost:8080/emprestimos"
+tags:
+  - name: "Biblioteca INFNET - EmprestimoController"
+paths:
+  /emprestimos:
+    post:
+      summary: "POST emprestimos"
+      operationId: "criarEmprestimo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Emprestimo"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+    get:
+      summary: "GET emprestimos"
+      operationId: "getAllEmprestimos"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Emprestimo"
+  /emprestimos/{id}:
+    get:
+      summary: "GET emprestimos/{id}"
+      operationId: "getEmprestimoById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+    put:
+      summary: "PUT emprestimos/{id}"
+      operationId: "updateEmprestimo"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Emprestimo"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+    delete:
+      summary: "DELETE emprestimos/{id}"
+      operationId: "deleteEmprestimo"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+  /emprestimos/{usuario}:
+    get:
+      summary: "GET emprestimos/{usuario}"
+      operationId: "getEmprestimoByUsuario"
+      parameters:
+        - name: "usuario"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+  /emprestimos/{livro}:
+    get:
+      summary: "GET emprestimos/{livro}"
+      operationId: "getEmprestimoByLivro"
+      parameters:
+        - name: "livro"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Emprestimo"
+components:
+  schemas:
+    Usuario:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        nome:
+          type: "string"
+        email:
+          type: "string"
+        senha:
+          type: "string"
+        meusLivros:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Livro"
+    Livro:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        emprestado:
+          type: "boolean"
+        titulo:
+          type: "string"
+        autor:
+          type: "string"
+        genero:
+          type: "string"
+        isbn:
+          type: "string"
+        sinopse:
+          type: "string"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        emprestimo:
+          $ref: "#/components/schemas/Emprestimo"
+    Emprestimo:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        ativo:
+          type: "boolean"
+        livro:
+          $ref: "#/components/schemas/Livro"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        dataVencimento:
+          type: "string"
+          format: "date-time"

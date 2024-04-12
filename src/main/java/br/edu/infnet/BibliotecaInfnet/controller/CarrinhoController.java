@@ -1,7 +1,6 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Carrinho;
-import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.service.CarrinhoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,12 @@ import java.util.UUID;
 @Tag(name = "Biblioteca INFNET - CarrinhoController")
 public class CarrinhoController {
     @Autowired
-    CarrinhoService service;
+    private CarrinhoService carrinhoService;
 
     @PostMapping(value = "/carrinho/{id}")
     public ResponseEntity<Carrinho> criarCarrinho (@PathVariable("id") UUID usuario_id){
         try{
-            Carrinho carrinho = service.criarCarrinho(usuario_id);
+            Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);
             return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
         }catch (NoSuchElementException ns){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -33,7 +32,7 @@ public class CarrinhoController {
     @GetMapping("/carrinho")
     public ResponseEntity<List<Carrinho>> getAll(){
 
-        List<Carrinho> carrinhos = service.getCarrinhos();
+        List<Carrinho> carrinhos = carrinhoService.getCarrinhos();
 
         if (carrinhos == null || carrinhos.isEmpty()) {
             return new ResponseEntity<List<Carrinho>>(HttpStatus.NO_CONTENT);
@@ -46,7 +45,7 @@ public class CarrinhoController {
     @GetMapping(value = "carrinho/{id}")
     public ResponseEntity<Carrinho> getById(@PathVariable("id") UUID id){
         try{
-            Carrinho carrinho = service.getById(id);
+            Carrinho carrinho = carrinhoService.getById(id);
             return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -56,7 +55,7 @@ public class CarrinhoController {
     @DeleteMapping(value = "carrinho/{id}")
     public ResponseEntity deletarCarrinho(@PathVariable("id") UUID id){
         try {
-            service.deletarCarrinho(id);
+            carrinhoService.deletarCarrinho(id);
             return new ResponseEntity(HttpStatus.OK);
         }
         catch (NoSuchElementException e){

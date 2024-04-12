@@ -16,16 +16,16 @@ import java.util.UUID;
 @Tag(name = "Biblioteca INFNET - UsuarioController")
 public class UsuarioController {
     @Autowired
-    private UsuarioService services;
+    private UsuarioService usuarioService;
 
     @GetMapping("/usuarios")
     public ResponseEntity<List<Usuario>> getAllUsers() {
-        return ResponseEntity.ok(services.getUserList());
+        return ResponseEntity.ok(usuarioService.getUserList());
     }
 
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<Usuario> getUserById(@PathVariable UUID id) {
-        Usuario user = services.obterUsuario(id);
+        Usuario user = usuarioService.obterUsuario(id);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
@@ -34,18 +34,18 @@ public class UsuarioController {
     }
     @PostMapping("/usuarios")
     public ResponseEntity<Usuario> addUser(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(this.services.createUser(usuario));
+        return ResponseEntity.ok(this.usuarioService.createUser(usuario));
     }
 
 
     @PutMapping("/usuarios/{id}")
     public ResponseEntity<Usuario> updateUser(@RequestBody Usuario user, @PathVariable int id) {
-        return ResponseEntity.ok().body(this.services.updateUserById(user));
+        return ResponseEntity.ok().body(this.usuarioService.updateUserById(user));
     }
 
     @DeleteMapping("/usuarios/{id}")
     public HttpStatus deleteUser(@PathVariable UUID id) {
-        this.services.deleteUserById(id);
+        this.usuarioService.deleteUserById(id);
         return HttpStatus.OK;
     }
 
