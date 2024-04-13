@@ -13,14 +13,14 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/carrinhos", produces = {"application/json"})
+@RequestMapping("/api/v1")
 @Tag(name = "Biblioteca INFNET - CarrinhoController")
 public class CarrinhoController {
     @Autowired
     private CarrinhoService carrinhoService;
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<Carrinho> criarCarrinho(@PathVariable("id") UUID usuario_id){
+    @PostMapping(value = "/carrinho/{id}")
+    public ResponseEntity<Carrinho> criarCarrinho (@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);
             return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
@@ -29,10 +29,10 @@ public class CarrinhoController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<Carrinho>> listarCarrinhos(){
+    @GetMapping("/carrinho")
+    public ResponseEntity<List<Carrinho>> getAll(){
 
-        List<Carrinho> carrinhos = carrinhoService.listarCarrinhos();
+        List<Carrinho> carrinhos = carrinhoService.getCarrinhos();
 
         if (carrinhos == null || carrinhos.isEmpty()) {
             return new ResponseEntity<List<Carrinho>>(HttpStatus.NO_CONTENT);
@@ -42,7 +42,17 @@ public class CarrinhoController {
 
     }
 
-    @DeleteMapping(value = "/{id}")
+    @GetMapping(value = "carrinho/{id}")
+    public ResponseEntity<Carrinho> getById(@PathVariable("id") UUID id){
+        try{
+            Carrinho carrinho = carrinhoService.getById(id);
+            return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
+        }catch (NoSuchElementException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "carrinho/{id}")
     public ResponseEntity deletarCarrinho(@PathVariable("id") UUID id){
         try {
             carrinhoService.deletarCarrinho(id);
@@ -54,13 +64,5 @@ public class CarrinhoController {
 
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Carrinho> listarCarrinhosPorId(@PathVariable("id") UUID id){
-        try{
-            Carrinho carrinho = carrinhoService.listarCarrinhosPorId(id);
-            return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+
 }

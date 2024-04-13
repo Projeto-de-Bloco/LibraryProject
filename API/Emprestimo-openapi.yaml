@@ -1,16 +1,16 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
   title: "LibraryProject API"
   description: "LibraryProject API"
   version: "1.0.0"
 servers:
-  - url: "https://localhost:8080/emprestimos"
+  - url: "http://localhost:8080"
 tags:
   - name: "Biblioteca INFNET - EmprestimoController"
 paths:
-  /emprestimos:
+  /api/v1/emprestimo:
     post:
-      summary: "POST emprestimos"
+      summary: "POST api/v1/emprestimo"
       operationId: "criarEmprestimo"
       requestBody:
         content:
@@ -26,7 +26,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
     get:
-      summary: "GET emprestimos"
+      summary: "GET api/v1/emprestimo"
       operationId: "getAllEmprestimos"
       responses:
         "200":
@@ -37,9 +37,9 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{id}:
+  /api/v1/emprestimo/{id}:
     get:
-      summary: "GET emprestimos/{id}"
+      summary: "GET api/v1/emprestimo/{id}"
       operationId: "getEmprestimoById"
       parameters:
         - name: "id"
@@ -56,7 +56,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
     put:
-      summary: "PUT emprestimos/{id}"
+      summary: "PUT api/v1/emprestimo/{id}"
       operationId: "updateEmprestimo"
       parameters:
         - name: "id"
@@ -79,7 +79,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
     delete:
-      summary: "DELETE emprestimos/{id}"
+      summary: "DELETE api/v1/emprestimo/{id}"
       operationId: "deleteEmprestimo"
       parameters:
         - name: "id"
@@ -95,9 +95,9 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{usuario}:
+  /api/v1/emprestimo/{usuario}:
     get:
-      summary: "GET emprestimos/{usuario}"
+      summary: "GET api/v1/emprestimo/{usuario}"
       operationId: "getEmprestimoByUsuario"
       parameters:
         - name: "usuario"
@@ -113,9 +113,9 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Emprestimo"
-  /emprestimos/{livro}:
+  /api/v1/emprestimo/{livro}:
     get:
-      summary: "GET emprestimos/{livro}"
+      summary: "GET api/v1/emprestimo/{livro}"
       operationId: "getEmprestimoByLivro"
       parameters:
         - name: "livro"
