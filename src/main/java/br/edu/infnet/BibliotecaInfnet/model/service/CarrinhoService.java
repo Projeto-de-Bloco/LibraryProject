@@ -14,28 +14,27 @@ import java.util.UUID;
 public class CarrinhoService {
 
     @Autowired
-    private CarrinhoRepository repository;
-
-    @Transactional(readOnly = true)
-    public Carrinho getById(UUID id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public List<Carrinho> getCarrinhos(){
-        return repository.findAll();
-    }
+    private CarrinhoRepository carrinhoRepository;
 
     public Carrinho criarCarrinho(UUID user_id){
         Carrinho carrinho = new Carrinho();
         Usuario usuario = new Usuario();
         usuario.setId(user_id);
         carrinho.setUsuario(usuario);
-        return repository.save(carrinho);
+        return carrinhoRepository.save(carrinho);
+    }
+
+    public List<Carrinho> listarCarrinhos(){
+        return carrinhoRepository.findAll();
     }
 
     public void deletarCarrinho(UUID id){
-        repository.deleteById(id);
+        carrinhoRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Carrinho listarCarrinhosPorId(UUID id) {
+        return carrinhoRepository.findById(id).orElse(null);
+    }
 
 }

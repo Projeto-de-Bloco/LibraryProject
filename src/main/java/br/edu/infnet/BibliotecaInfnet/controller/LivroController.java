@@ -31,64 +31,13 @@ public class LivroController {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
         try {
-            List<Livro> lista = livroService.obterLista();
+            List<Livro> lista = livroService.listarLivros();
             if(!lista.isEmpty()) {
                 retorno = ResponseEntity.ok().body(lista);
             }
         }catch(Exception e) {
         }
 
-        return retorno;
-    }
-
-    @GetMapping("/livros/{autor}")
-    public ResponseEntity<Object> listarPorAutor(@PathVariable String autor) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
-        try {
-            List<Livro> lista = livroService.findByAutor(autor);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
-        }
-        return retorno;
-    }
-    @GetMapping("/livros/{genero}")
-    public ResponseEntity<Object> listarPorGenero(@PathVariable String genero) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
-        try {
-            List<Livro> lista = livroService.findByGenero(genero);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
-        }
-        return retorno;
-    }
-    @GetMapping("/livros/{titulo}")
-    public ResponseEntity<Object> listarPorTitulo(@PathVariable String titulo) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
-        try {
-            List<Livro> lista = livroService.findByTitulo(titulo);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
-        }
-        return retorno;
-    }
-    @GetMapping("/livros/{id}")
-    public ResponseEntity<Object> listarPorId(@PathVariable UUID id) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
-        try {
-            Livro livro = livroService.findById(id);
-            retorno = ResponseEntity.ok().body(livro);
-        }catch(Exception e) {
-        }
         return retorno;
     }
 
@@ -97,7 +46,7 @@ public class LivroController {
         ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
 
         if(livro != null && id != null ) {
-            Livro livroGravado = livroService.findById(id);
+            Livro livroGravado = livroService.obterLivro(id);
             if(livroGravado != null) {
                 try {
                     livro.setId(id);
@@ -111,14 +60,66 @@ public class LivroController {
     }
 
     @DeleteMapping("/livros/{id}")
-    public void deletarLivroById(@PathVariable UUID id) {
-        Livro livroDeletado = livroService.findById(id);
+    public void deletarLivro(@PathVariable UUID id) {
+        Livro livroDeletado = livroService.obterLivro(id);
         if(livroDeletado != null) {
             try {
-                livroService.excluir(id);
+                livroService.deletarLivro(id);
             }catch(Exception e) {
             }
         }
     }
 
+    @GetMapping("/livros/{autor}")
+    public ResponseEntity<Object> listarLivrosPorAutor(@PathVariable String autor) {
+        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
+
+        try {
+            List<Livro> lista = livroService.listarLivrosPorAutor(autor);
+            if(!lista.isEmpty()) {
+                retorno = ResponseEntity.ok().body(lista);
+            }
+        }catch(Exception e) {
+        }
+        return retorno;
+    }
+    @GetMapping("/livros/{genero}")
+    public ResponseEntity<Object> listarLivrosPorGenero(@PathVariable String genero) {
+        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
+
+        try {
+            List<Livro> lista = livroService.listarLivrosPorGenero(genero);
+            if(!lista.isEmpty()) {
+                retorno = ResponseEntity.ok().body(lista);
+            }
+        }catch(Exception e) {
+        }
+        return retorno;
+    }
+
+    @GetMapping("/livros/{id}")
+    public ResponseEntity<Object> obterLivro(@PathVariable UUID id) {
+        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
+
+        try {
+            Livro livro = livroService.obterLivro(id);
+            retorno = ResponseEntity.ok().body(livro);
+        }catch(Exception e) {
+        }
+        return retorno;
+    }
+
+    @GetMapping("/livros/{titulo}")
+    public ResponseEntity<Object> listarLivrosPorTitulo(@PathVariable String titulo) {
+        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
+
+        try {
+            List<Livro> lista = livroService.listarLivrosPorTitulo(titulo);
+            if(!lista.isEmpty()) {
+                retorno = ResponseEntity.ok().body(lista);
+            }
+        }catch(Exception e) {
+        }
+        return retorno;
+    }
 }

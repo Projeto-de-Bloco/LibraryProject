@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
 
-    List<Emprestimo> findByUsuarioId(UUID id);
-    List<Emprestimo> findByLivroId(UUID id);
+    List<Emprestimo> listarUsuarioPorId(UUID id);
+    List<Emprestimo> listarLivroPorId(UUID id);
 }

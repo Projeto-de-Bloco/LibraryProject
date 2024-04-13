@@ -12,7 +12,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getUserList() {
+    public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
 
@@ -20,19 +20,19 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    public Usuario createUser(Usuario user) {
-        return usuarioRepository.save(user);
+    public Usuario criarUsuario(Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 
-    public Usuario updateUserById(Usuario user) {
-        if (user.getId() != null && usuarioRepository.existsById(user.getId())) {
-            return usuarioRepository.save(user);
+    public Usuario atualizarUsuarioPorId(Usuario usuario) {
+        if (usuario.getId() != null && usuarioRepository.existsById(usuario.getId())) {
+            return usuarioRepository.save(usuario);
         } else {
             return null;
         }
     }
 
-    public void deleteUserById(UUID id) {
+    public void deletarUsuario(UUID id) {
         usuarioRepository.deleteById(id);
     }
 }

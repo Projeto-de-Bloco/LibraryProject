@@ -18,13 +18,29 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PostMapping("/usuarios")
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+        return ResponseEntity.ok(this.usuarioService.criarUsuario(usuario));
+    }
+
     @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> getAllUsers() {
-        return ResponseEntity.ok(usuarioService.getUserList());
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        return ResponseEntity.ok(usuarioService.listarUsuarios());
+    }
+
+    @PutMapping("/usuarios/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario user, @PathVariable int id) {
+        return ResponseEntity.ok().body(this.usuarioService.atualizarUsuarioPorId(user));
+    }
+
+    @DeleteMapping("/usuarios/{id}")
+    public HttpStatus deletarUsuario(@PathVariable UUID id) {
+        this.usuarioService.deletarUsuario(id);
+        return HttpStatus.OK;
     }
 
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<Usuario> listarUsuariosPorId(@PathVariable UUID id) {
         Usuario user = usuarioService.obterUsuario(id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -32,21 +48,4 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    @PostMapping("/usuarios")
-    public ResponseEntity<Usuario> addUser(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(this.usuarioService.createUser(usuario));
-    }
-
-
-    @PutMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> updateUser(@RequestBody Usuario user, @PathVariable int id) {
-        return ResponseEntity.ok().body(this.usuarioService.updateUserById(user));
-    }
-
-    @DeleteMapping("/usuarios/{id}")
-    public HttpStatus deleteUser(@PathVariable UUID id) {
-        this.usuarioService.deleteUserById(id);
-        return HttpStatus.OK;
-    }
-
 }

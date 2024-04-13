@@ -18,23 +18,23 @@ public class EmprestimoService {
         return emprestimoRepository.save(emprestimo);
     }
 
-    public Emprestimo getEmprestimoById(UUID id) {
+    public Emprestimo listarEmprestimosPorId(UUID id) {
         return emprestimoRepository.findById(id).orElse(null);
     }
 
-    public List<Emprestimo> getEmprestimoByUsuario(UUID id_usuario) {
-        return emprestimoRepository.findByUsuarioId(id_usuario);
+    public List<Emprestimo> listarEmprestimosPorUsuario(UUID id_usuario) {
+        return emprestimoRepository.listarUsuarioPorId(id_usuario);
     }
 
-    public List<Emprestimo> getEmprestimoByLivro(UUID id_livro) {
-        return emprestimoRepository.findByLivroId(id_livro);
+    public List<Emprestimo> listarEmprestimosPorLivro(UUID id_livro) {
+        return emprestimoRepository.listarLivroPorId(id_livro);
     }
 
-    public List<Emprestimo> getEmprestimos() {
+    public List<Emprestimo> listarEmprestimos() {
         return emprestimoRepository.findAll();
     }
 
-    public Emprestimo updateEmprestimoById(Emprestimo emprestimo) {
+    public Emprestimo atualizarEmprestimo(Emprestimo emprestimo) {
         if (emprestimo.getId() != null && emprestimoRepository.existsById(emprestimo.getId())) {
             return emprestimoRepository.save(emprestimo);
         } else {
@@ -42,7 +42,7 @@ public class EmprestimoService {
         }
     }
 
-    public void deleteEmprestimoById(UUID id) {
+    public void deletarEmprestimo(UUID id) {
         emprestimoRepository.deleteById(id);
     }
 }

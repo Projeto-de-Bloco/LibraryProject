@@ -18,23 +18,23 @@ public class LivroService {
     public Livro criarLivro(Livro livro) {
         return livroRepository.save(livro);
     }
-    public List<Livro> obterLista() {
+    public List<Livro> listarLivros() {
         return (List<Livro>) livroRepository.findAll();
     }
-    public Livro findById(UUID id) {
+    public Livro obterLivro(UUID id) {
         return livroRepository.findById(id).orElse(null);
     }
-    public List<Livro> findByAutor(String autor) {
-        return livroRepository.findByAutor(autor);
+    public List<Livro> listarLivrosPorAutor(String autor) {
+        return livroRepository.listarLivrosPorAutor(autor);
     }
-    public List<Livro> findByTitulo(String titulo) {
-        return livroRepository.findByTitulo(titulo);
+    public List<Livro> listarLivrosPorTitulo(String titulo) {
+        return livroRepository.listarLivrosPorTitulo(titulo);
     }
-    public List<Livro> findByGenero(String genero) {
-        return livroRepository.findByGenero(genero);
+    public List<Livro> listarLivrosPorGenero(String genero) {
+        return livroRepository.listarlivrosPorGenero(genero);
     }
 
-    public void excluir(UUID id) {
+    public void deletarLivro(UUID id) {
         livroRepository.deleteById(id);
     }
 }
