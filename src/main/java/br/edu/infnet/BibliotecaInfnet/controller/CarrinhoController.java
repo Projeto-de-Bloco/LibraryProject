@@ -20,7 +20,7 @@ public class CarrinhoController {
     private CarrinhoService carrinhoService;
 
     @PostMapping(value = "/carrinho/{id}")
-    public ResponseEntity<Carrinho> criarCarrinho (@PathVariable("id") UUID usuario_id){
+    public ResponseEntity<Carrinho> criarCarrinho(@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);
             return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
@@ -30,26 +30,12 @@ public class CarrinhoController {
     }
 
     @GetMapping("/carrinho")
-    public ResponseEntity<List<Carrinho>> getAll(){
-
-        List<Carrinho> carrinhos = carrinhoService.getCarrinhos();
-
+    public ResponseEntity<List<Carrinho>> listarCarrinhos(){
+        List<Carrinho> carrinhos = carrinhoService.listarCarrinhos();
         if (carrinhos == null || carrinhos.isEmpty()) {
             return new ResponseEntity<List<Carrinho>>(HttpStatus.NO_CONTENT);
         }
-
         return new ResponseEntity<List<Carrinho>>(carrinhos, HttpStatus.OK);
-
-    }
-
-    @GetMapping(value = "carrinho/{id}")
-    public ResponseEntity<Carrinho> getById(@PathVariable("id") UUID id){
-        try{
-            Carrinho carrinho = carrinhoService.getById(id);
-            return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
     @DeleteMapping(value = "carrinho/{id}")
@@ -61,7 +47,16 @@ public class CarrinhoController {
         catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @GetMapping(value = "carrinho/{id}")
+    public ResponseEntity<Carrinho> listarCarrinhosPorId(@PathVariable("id") UUID id){
+        try{
+            Carrinho carrinho = carrinhoService.listarCarrinhosPorId(id);
+            return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
+        }catch (NoSuchElementException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 

@@ -30,14 +30,27 @@ public class EmprestimoController {
     }
 
     @GetMapping("/emprestimo")
-    public ResponseEntity<List<Emprestimo>> getAllEmprestimos() {
-        List<Emprestimo> emprestimos = emprestimoService.getEmprestimos();
+    public ResponseEntity<List<Emprestimo>> listarEmpestimos() {
+        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimos();
         return new ResponseEntity(emprestimos, HttpStatus.OK);
     }
 
+    @PutMapping("/emprestimo/{id}")
+    public  ResponseEntity<Emprestimo> atualizarEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) {
+        Emprestimo emprestimoModificado = emprestimoService.listarEmprestimosPorId(id);
+        emprestimoService.atualizarEmprestimo(emprestimoModificado);
+        return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/emprestimo/{id}")
+    public ResponseEntity<Emprestimo> deletarEmprestimo(@PathVariable UUID id) {
+        emprestimoService.deletarEmprestimo(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @GetMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> getEmprestimoById(@PathVariable("id") UUID id) {
-        Emprestimo emprestimo = emprestimoService.getEmprestimoById(id);
+    public ResponseEntity<Emprestimo> listarEmprestimoPorId(@PathVariable("id") UUID id) {
+        Emprestimo emprestimo = emprestimoService.listarEmprestimosPorId(id);
         if (emprestimo != null) {
             return new ResponseEntity(emprestimo, HttpStatus.OK);
         } else {
@@ -46,8 +59,8 @@ public class EmprestimoController {
     }
 
     @GetMapping("/emprestimo/{usuario}")
-    public ResponseEntity<Emprestimo> getEmprestimoByUsuario(@PathVariable("usuario") UUID id_usuario) {
-        List<Emprestimo> emprestimos = emprestimoService.getEmprestimoByUsuario(id_usuario);
+    public ResponseEntity<Emprestimo> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
+        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
         if (emprestimos != null) {
             return new ResponseEntity(emprestimos, HttpStatus.OK);
         } else {
@@ -57,24 +70,11 @@ public class EmprestimoController {
 
     @GetMapping("/emprestimo/{livro}")
     public ResponseEntity<Emprestimo> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
-        List<Emprestimo> emprestimos = emprestimoService.getEmprestimoByLivro(id_livro);
+        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);
         if (emprestimos != null) {
             return new ResponseEntity(emprestimos, HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @PutMapping("/emprestimo/{id}")
-    public  ResponseEntity<Emprestimo> updateEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) {
-        Emprestimo emprestimoModificado = emprestimoService.getEmprestimoById(id);
-        emprestimoService.updateEmprestimoById(emprestimoModificado);
-        return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> deleteEmprestimo(@PathVariable UUID id) {
-        emprestimoService.deleteEmprestimoById(id);
-        return new ResponseEntity(HttpStatus.OK);
     }
 }
