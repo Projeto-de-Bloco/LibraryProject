@@ -1,0 +1,62 @@
+Carrinho:
+-usuario
+-listaLivros
+
+Comandos:
+-usuario cria/apaga carrinho
+-livro adicionado/removido na listaLivros
+
+Eventos:
+-carrinho criado/removido
+
+Query:
+-consultar lista de livros
+
+---
+Emprestimo:
+-usuario
+-livro
+
+Comandos:
+-usuario cria/desfaz emprestimo
+-emprestimo contem livro
+
+Eventos:
+-emprestimo criado/desfeito
+
+Query:
+-consultar livro emprestado
+-consultar data de devolucao
+
+---
+Livro:
+-usuario
+-emprestimo
+
+Comandos:
+-livro foi emprestado
+
+Eventos:
+-livro está/não está disponivel para emprestimo
+
+Query:
+-estado do livro (emprestado ou livre para emprestimo)
+
+---
+Usuario:
+-listaLivros
+-listaEmprestimos
+
+Comandos:
+-adiciona/remove livro
+-cria/desfaz emprestimo
+-cria/remove carrinho
+
+Eventos:
+-emprestimo criado/desfeito
+-carrinho criado/desfeito
+
+Query:
+-consultar lista de emprestimos
+-consultar lista de livros
+-consultar carrinho
