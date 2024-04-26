@@ -25,13 +25,13 @@ public class LivroService {
         return livroRepository.findById(id).orElse(null);
     }
     public List<Livro> listarLivrosPorAutor(String autor) {
-        return livroRepository.listarLivrosPorAutor(autor);
+        return livroRepository.findByAutor(autor);
     }
     public List<Livro> listarLivrosPorTitulo(String titulo) {
-        return livroRepository.listarLivrosPorTitulo(titulo);
+        return livroRepository.findByTitulo(titulo);
     }
     public List<Livro> listarLivrosPorGenero(String genero) {
-        return livroRepository.listarlivrosPorGenero(genero);
+        return livroRepository.findByGenero(genero);
     }
 
     public void deletarLivro(UUID id) {

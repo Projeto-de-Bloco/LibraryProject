@@ -23,11 +23,11 @@ public class EmprestimoService {
     }
 
     public List<Emprestimo> listarEmprestimosPorUsuario(UUID id_usuario) {
-        return emprestimoRepository.listarUsuarioPorId(id_usuario);
+        return emprestimoRepository.findByUsuarioId(id_usuario);
     }
 
     public List<Emprestimo> listarEmprestimosPorLivro(UUID id_livro) {
-        return emprestimoRepository.listarLivroPorId(id_livro);
+        return emprestimoRepository.findByLivroId(id_livro);
     }
 
     public List<Emprestimo> listarEmprestimos() {

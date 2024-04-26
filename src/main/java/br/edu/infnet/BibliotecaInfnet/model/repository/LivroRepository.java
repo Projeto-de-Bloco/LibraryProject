@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface LivroRepository extends JpaRepository<Livro, UUID> {
-    List<Livro> listarLivrosPorAutor(String autor);
-    List<Livro> listarLivrosPorTitulo(String titulo);
-    List<Livro> listarlivrosPorGenero(String genero);
+    List<Livro> findByAutor(String autor);
+    List<Livro> findByTitulo(String titulo);
+    List<Livro> findByGenero(String genero);
 }
