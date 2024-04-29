@@ -29,6 +29,17 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
+    @Override
+    public String toString() {
+        return "Emprestimo{" +
+                "id=" + id +
+                ", ativo=" + ativo +
+                ", livro=" + livro +
+                ", usuario=" + usuario +
+                ", dataVencimento=" + dataVencimento +
+                '}';
+    }
+
     public UUID getId() {
         return id;
     }

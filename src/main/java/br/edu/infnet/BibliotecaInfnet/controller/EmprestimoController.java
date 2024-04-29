@@ -2,6 +2,8 @@ package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
+import br.edu.infnet.BibliotecaInfnet.model.service.NotificacaoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,16 @@ public class EmprestimoController {
 
     @Autowired
     private EmprestimoService emprestimoService;
+    private NotificacaoService notificacaoService;
 
     @PostMapping("/emprestimo")
-    public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) {
+    public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) throws JsonProcessingException {
         Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimo);
         if (emprestimoCriado != null) {
+
+            notificacaoService.notificar("EmprestimoController.criarEmprestimo", emprestimo.toString());
+
+
             return new ResponseEntity(emprestimo, HttpStatus.CREATED);
         } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -36,9 +43,11 @@ public class EmprestimoController {
     }
 
     @PutMapping("/emprestimo/{id}")
-    public  ResponseEntity<Emprestimo> atualizarEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) {
+    public  ResponseEntity<Emprestimo> atualizarEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) throws JsonProcessingException {
         Emprestimo emprestimoModificado = emprestimoService.listarEmprestimosPorId(id);
         emprestimoService.atualizarEmprestimo(emprestimoModificado);
+        notificacaoService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
+
         return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
     }
 

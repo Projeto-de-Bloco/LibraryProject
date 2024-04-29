@@ -2,6 +2,9 @@ package br.edu.infnet.BibliotecaInfnet.model.service;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.repository.EmprestimoRepository;
+import br.edu.infnet.BibliotecaInfnet.notification.Notify;
+import br.edu.infnet.BibliotecaInfnet.notification.NotifyAzureServiceBus;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ public class EmprestimoService {
 
     public Emprestimo criarEmprestimo(Emprestimo emprestimo) {
         return emprestimoRepository.save(emprestimo);
+
     }
 
     public Emprestimo listarEmprestimosPorId(UUID id) {
