@@ -2,7 +2,7 @@ package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
-import br.edu.infnet.BibliotecaInfnet.model.service.NotificacaoService;
+import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,15 @@ public class EmprestimoController {
 
     @Autowired
     private EmprestimoService emprestimoService;
-    private NotificacaoService notificacaoService;
+    @Autowired
+    private NotifyService notifyService;
 
     @PostMapping("/emprestimo")
     public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) throws JsonProcessingException {
         Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimo);
         if (emprestimoCriado != null) {
 
-            notificacaoService.notificar("EmprestimoController.criarEmprestimo", emprestimo.toString());
+            notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimo.toString());
 
 
             return new ResponseEntity(emprestimo, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class EmprestimoController {
     public  ResponseEntity<Emprestimo> atualizarEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) throws JsonProcessingException {
         Emprestimo emprestimoModificado = emprestimoService.listarEmprestimosPorId(id);
         emprestimoService.atualizarEmprestimo(emprestimoModificado);
-        notificacaoService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
+        notifyService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
 
         return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
     }

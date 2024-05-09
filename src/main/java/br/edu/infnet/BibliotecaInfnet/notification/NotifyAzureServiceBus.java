@@ -7,13 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class NotifyAzureServiceBus {
-
     private static final String connectionString = "connectionstring_trocarPelaVerdadeira";
     private static final String queueName = "library_project";
 
     public NotifyAzureServiceBus() { }
 
-    public void sendMessage(Notify notify) throws JsonProcessingException {
+    public void sendMessage(Object messageObject) throws JsonProcessingException {
         ServiceBusSenderClient sender = new ServiceBusClientBuilder()
                 .connectionString(connectionString)
                 .sender()
@@ -21,11 +20,9 @@ public class NotifyAzureServiceBus {
                 .buildClient();
 
         ObjectMapper mapper = new ObjectMapper();
-        String body = mapper.writeValueAsString(notify);
+        String body = mapper.writeValueAsString(messageObject);
 
         ServiceBusMessage message = new ServiceBusMessage(body);
         sender.sendMessage(message);
     }
-
-
 }
