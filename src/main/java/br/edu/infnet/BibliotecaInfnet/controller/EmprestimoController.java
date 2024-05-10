@@ -2,6 +2,7 @@ package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
+import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
 import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,10 +22,15 @@ public class EmprestimoController {
     @Autowired
     private EmprestimoService emprestimoService;
     @Autowired
+    private LivroService livroService;
+    @Autowired
     private NotifyService notifyService;
 
     @PostMapping("/emprestimo")
-    public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody Emprestimo emprestimo) throws JsonProcessingException {
+    public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody EmprestimoDto emprestimoDto) throws JsonProcessingException {
+        //falta na hora do emprestimo verificar se o livro ja esta emprestado e criar o Dto com as infos necessarias(usuario, livro)
+        //falta o serviço de notificação
+        livroService.obterLivro(emprestimo.li)
         Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimo);
         if (emprestimoCriado != null) {
 
@@ -38,18 +44,17 @@ public class EmprestimoController {
     }
 
     @GetMapping("/emprestimo")
-    public ResponseEntity<List<Emprestimo>> listarEmpestimos() {
+    public ResponseEntity<List<Emprestimo>> listarEmprestimos() {
         List<Emprestimo> emprestimos = emprestimoService.listarEmprestimos();
         return new ResponseEntity(emprestimos, HttpStatus.OK);
     }
 
-    @PutMapping("/emprestimo/{id}")
-    public  ResponseEntity<Emprestimo> atualizarEmprestimo(@PathVariable UUID id, @RequestBody Emprestimo emprestimo) throws JsonProcessingException {
-        Emprestimo emprestimoModificado = emprestimoService.listarEmprestimosPorId(id);
-        emprestimoService.atualizarEmprestimo(emprestimoModificado);
+    @PutMapping("/emprestimo/devolver/{id}")
+    public  ResponseEntity<Emprestimo> devolverEmprestimo(@PathVariable UUID id) throws JsonProcessingException {
+        Emprestimo emprestimo = emprestimoService.devolverEmprestimo(id);
         notifyService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
 
-        return new ResponseEntity(emprestimoModificado, HttpStatus.OK);
+        return new ResponseEntity(emprestimo, HttpStatus.OK);
     }
 
     @DeleteMapping("/emprestimo/{id}")
@@ -68,7 +73,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/{usuario}")
+    @GetMapping("/emprestimo/usuario/{usuario}")
     public ResponseEntity<Emprestimo> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
         List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
         if (emprestimos != null) {
@@ -78,7 +83,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/{livro}")
+    @GetMapping("/emprestimo/livro/{livro}")
     public ResponseEntity<Emprestimo> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
         List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);
         if (emprestimos != null) {

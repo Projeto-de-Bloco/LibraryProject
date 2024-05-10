@@ -47,6 +47,11 @@ public class EmprestimoService {
         return emprestimoRepository.findAll();
     }
 
+    public Emprestimo devolverEmprestimo(UUID id) {
+        Emprestimo emprestimo = this.listarEmprestimosPorId(id);
+        emprestimo.setAtivo(false);
+        return this.atualizarEmprestimo(emprestimo);
+    }
     public Emprestimo atualizarEmprestimo(Emprestimo emprestimo) {
         if (emprestimo.getId() != null && emprestimoRepository.existsById(emprestimo.getId())) {
             return emprestimoRepository.save(emprestimo);

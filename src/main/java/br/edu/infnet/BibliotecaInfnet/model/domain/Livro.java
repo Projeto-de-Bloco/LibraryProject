@@ -12,7 +12,6 @@ public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private Boolean emprestado;
     private String titulo;
     private String autor;
     private String genero;
@@ -34,14 +33,6 @@ public class Livro {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public Boolean getEmprestado() {
-        return emprestado;
-    }
-
-    public void setEmprestado(Boolean emprestado) {
-        this.emprestado = emprestado;
     }
 
     public String getTitulo() {

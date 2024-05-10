@@ -17,7 +17,7 @@ import java.util.UUID;
 public class LivroController {
     @Autowired
     private LivroService livroService;
-
+    // get livros por usuarioId
     @PostMapping("/livros/{id}")
     public ResponseEntity<Object> criarLivro(@RequestBody Livro livro) {
         ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
@@ -71,7 +71,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/{autor}")
+    @GetMapping("/livros/autor/{autor}")
     public ResponseEntity<Object> listarLivrosPorAutor(@PathVariable String autor) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -84,7 +84,7 @@ public class LivroController {
         }
         return retorno;
     }
-    @GetMapping("/livros/{genero}")
+    @GetMapping("/livros/genero/{genero}")
     public ResponseEntity<Object> listarLivrosPorGenero(@PathVariable String genero) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -98,7 +98,7 @@ public class LivroController {
         return retorno;
     }
 
-    @GetMapping("/livros/{id}")
+    @GetMapping("/livros/id/{id}")
     public ResponseEntity<Object> obterLivro(@PathVariable UUID id) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
@@ -110,7 +110,7 @@ public class LivroController {
         return retorno;
     }
 
-    @GetMapping("/livros/{titulo}")
+    @GetMapping("/livros/titulo/{titulo}")
     public ResponseEntity<Object> listarLivrosPorTitulo(@PathVariable String titulo) {
         ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
 
