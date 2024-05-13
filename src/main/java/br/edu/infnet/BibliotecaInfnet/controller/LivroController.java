@@ -1,6 +1,7 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
+import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,4 +123,21 @@ public class LivroController {
         }
         return retorno;
     }
+
+    @PostMapping("/livros/{id}/solicitar-emprestimo")
+    public ResponseEntity<Object> solicitarEmprestimo(@PathVariable UUID id) {
+        Livro livro = livroService.obterLivro(id);
+        if (livro == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (livro.getEmprestado()) {
+            return ResponseEntity.badRequest().body("Livro já emprestado.");
+        }
+
+        livroService.solicitarEmprestimo(livro, livro.getUsuario());
+
+        return ResponseEntity.ok("Solicitação de empréstimo realizada com sucesso.");
+    }
+
 }

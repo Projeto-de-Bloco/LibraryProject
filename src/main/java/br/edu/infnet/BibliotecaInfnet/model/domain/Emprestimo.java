@@ -29,6 +29,14 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
         return "Emprestimo{" +
@@ -64,13 +72,7 @@ public class Emprestimo {
         this.livro = livro;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
     public LocalDateTime getDataVencimento() {
         return dataVencimento;

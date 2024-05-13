@@ -16,9 +16,18 @@ public class EmprestimoService {
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
+    @Autowired
+    private  NotificacaoService notificacaoService;
 
     public Emprestimo criarEmprestimo(Emprestimo emprestimo) {
-        return emprestimoRepository.save(emprestimo);
+        Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+
+        notificacaoService.publicarNotificacao("Emprestimo realizado", "Seu emprestimo foi realizado com sucesso ", emprestimo.getUsuario());
+        notificacaoService.publicarNotificacao("Livro emprestado", "Seu livro foi empresatado com sucesso ", emprestimo.getLivro().getUsuario());
+
+        notificacaoService.processarFila();
+
+        return emprestimoSalvo;
 
     }
 
