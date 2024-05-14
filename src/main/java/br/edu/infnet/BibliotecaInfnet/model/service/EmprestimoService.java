@@ -26,6 +26,7 @@ public class EmprestimoService {
         Emprestimo emprestimo = new Emprestimo(UUID.randomUUID(), true, emprestimoDto.getLivro(), emprestimoDto.getUsuario(), LocalDateTime.now().plusDays(7));
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
 
+
         notificacaoService.publicarNotificacao("Emprestimo realizado", "Seu emprestimo foi realizado com sucesso ", emprestimo.getUsuario());
         notificacaoService.publicarNotificacao("Livro emprestado", "Seu livro foi empresatado com sucesso ", emprestimo.getLivro().getUsuario());
 
