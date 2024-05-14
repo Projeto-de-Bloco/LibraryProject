@@ -1,6 +1,7 @@
 package br.edu.infnet.BibliotecaInfnet.model.service;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
+import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.repository.EmprestimoRepository;
 import br.edu.infnet.BibliotecaInfnet.notification.Notify;
 import br.edu.infnet.BibliotecaInfnet.notification.NotifyAzureServiceBus;
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +22,8 @@ public class EmprestimoService {
     @Autowired
     private  NotificacaoService notificacaoService;
 
-    public Emprestimo criarEmprestimo(Emprestimo emprestimo) {
+    public Emprestimo criarEmprestimo(EmprestimoDto emprestimoDto) {
+        Emprestimo emprestimo = new Emprestimo(UUID.randomUUID(), true, emprestimoDto.getLivro(), emprestimoDto.getUsuario(), LocalDateTime.now().plusDays(7));
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
 
         notificacaoService.publicarNotificacao("Emprestimo realizado", "Seu emprestimo foi realizado com sucesso ", emprestimo.getUsuario());
@@ -32,6 +36,7 @@ public class EmprestimoService {
     }
 
     public Emprestimo listarEmprestimosPorId(UUID id) {
+
         return emprestimoRepository.findById(id).orElse(null);
     }
 
@@ -44,6 +49,7 @@ public class EmprestimoService {
     }
 
     public List<Emprestimo> listarEmprestimos() {
+
         return emprestimoRepository.findAll();
     }
 
@@ -61,6 +67,7 @@ public class EmprestimoService {
     }
 
     public void deletarEmprestimo(UUID id) {
+
         emprestimoRepository.deleteById(id);
     }
 }

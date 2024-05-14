@@ -48,22 +48,6 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
-    public void solicitarEmprestimo(Livro livro, Usuario usuario) {
-        if (!livro.getEmprestado()) {
-            livro.setEmprestado(true);
-            livroRepository.save(livro);
-
-            Emprestimo emprestimo = new Emprestimo();
-            emprestimo.setLivro(livro);
-            emprestimo.setUsuario(usuario);
-            emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
-            emprestimo.setAtivo(true);
-            emprestimoRepository.save(emprestimo);
-
-        } else {
-            throw new LivroNaoDisponivelException("Livro já emprestado.");
-        }
-    }
 
 }
 

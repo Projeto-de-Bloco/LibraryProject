@@ -1,6 +1,7 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
+import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
 import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
@@ -28,19 +29,16 @@ public class EmprestimoController {
 
     @PostMapping("/emprestimo")
     public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody EmprestimoDto emprestimoDto) throws JsonProcessingException {
-        //falta na hora do emprestimo verificar se o livro ja esta emprestado e criar o Dto com as infos necessarias(usuario, livro)
-        //falta o serviço de notificação
-        livroService.obterLivro(emprestimo.li)
-        Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimo);
-        if (emprestimoCriado != null) {
-
-            notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimo.toString());
-
-
-            return new ResponseEntity(emprestimo, HttpStatus.CREATED);
-        } else {
+        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(emprestimoDto.getLivro().getId());
+        if (!emprestimos.isEmpty()){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        else {
+            Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimoDto);
+            notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimoCriado.toString());
+            return new ResponseEntity(emprestimoCriado, HttpStatus.CREATED);
+        }
+
     }
 
     @GetMapping("/emprestimo")

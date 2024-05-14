@@ -29,6 +29,14 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
+    public Emprestimo(UUID id, Boolean ativo, Livro livro, Usuario usuario, LocalDateTime dataVencimento) {
+        this.id = id;
+        this.ativo = ativo;
+        this.livro = livro;
+        this.usuario = usuario;
+        this.dataVencimento = dataVencimento;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
