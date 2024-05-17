@@ -21,11 +21,24 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Carrinho criado com sucesso"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Carrinho"
+        "400":
+          description: "Requisição inválida - ID de usuário não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
     get:
       summary: "GET api/v1/carrinho/{id}"
       operationId: "getById"
@@ -38,11 +51,25 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Carrinho encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Carrinho"
+        "204":
+          description: "Nenhum conteúdo - Carrinho não encontrado"
+        "400":
+          description: "Requisição inválida - ID de usuário inválido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       summary: "DELETE api/v1/carrinho/{id}"
       operationId: "deletarCarrinho"
@@ -55,24 +82,40 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Carrinho deletado com sucesso"
+        "400":
+          description: "Requisição inválida - ID de carrinho não encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/ResponseEntity"
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/v1/carrinho:
     get:
       summary: "GET api/v1/carrinho"
       operationId: "getAll"
       responses:
         "200":
-          description: "OK"
+          description: "Carrinhos recuperados com sucesso"
           content:
-            '*/*':
+            application/json:
               schema:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Carrinho"
+        "204":
+          description: "Nenhum conteúdo - Nenhum carrinho encontrado"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Emprestimo:
@@ -150,3 +193,9 @@ components:
           $ref: "#/components/schemas/HttpHeaders"
       required:
         - "headers"
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        message:

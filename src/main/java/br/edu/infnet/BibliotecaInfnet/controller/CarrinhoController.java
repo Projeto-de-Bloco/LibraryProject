@@ -6,11 +6,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,44 +19,75 @@ public class CarrinhoController {
     private CarrinhoService carrinhoService;
 
     @PostMapping(value = "/carrinho/{id}")
-    public ResponseEntity<Carrinho> criarCarrinho(@PathVariable("id") UUID usuario_id){
+    public ResponseEntity<?> criarCarrinho(@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);
-            return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
-        }catch (NoSuchElementException ns){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(carrinho, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de usuário não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/carrinho")
-    public ResponseEntity<List<Carrinho>> listarCarrinhos(){
-        List<Carrinho> carrinhos = carrinhoService.listarCarrinhos();
-        if (carrinhos == null || carrinhos.isEmpty()) {
-            return new ResponseEntity<List<Carrinho>>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> listarCarrinhos() {
+        try {
+            List<Carrinho> carrinhos = carrinhoService.listarCarrinhos();
+            if (carrinhos == null || carrinhos.isEmpty()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("code", HttpStatus.NO_CONTENT.value());
+                response.put("message", "Nenhum carrinho encontrado");
+                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(carrinhos, HttpStatus.OK);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<List<Carrinho>>(carrinhos, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "carrinho/{id}")
-    public ResponseEntity deletarCarrinho(@PathVariable("id") UUID id){
+    public ResponseEntity<?> deletarCarrinho(@PathVariable("id") UUID id){
         try {
             carrinhoService.deletarCarrinho(id);
             return new ResponseEntity(HttpStatus.OK);
         }
-        catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        catch (NoSuchElementException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de carrinho não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(value = "carrinho/{id}")
-    public ResponseEntity<Carrinho> listarCarrinhosPorId(@PathVariable("id") UUID id){
+    public ResponseEntity<?> listarCarrinhosPorId(@PathVariable("id") UUID id){
         try{
             Carrinho carrinho = carrinhoService.listarCarrinhosPorId(id);
             return new ResponseEntity<Carrinho>(carrinho, HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (IllegalArgumentException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de usuário inválido");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
