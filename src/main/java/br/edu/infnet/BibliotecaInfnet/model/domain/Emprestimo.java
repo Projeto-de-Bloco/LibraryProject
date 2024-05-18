@@ -9,10 +9,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "tb_emprestimo")
-
+@AllArgsConstructor
 public class Emprestimo {
 
     @Id
@@ -29,13 +31,18 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
-    public Emprestimo(UUID id, Boolean ativo, Livro livro, Usuario usuario, LocalDateTime dataVencimento) {
+    public Emprestimo() {
+    }
+
+
+
+    /*public Emprestimo(UUID id, Boolean ativo, Livro livro, Usuario usuario, LocalDateTime dataVencimento) {
         this.id = id;
         this.ativo = ativo;
         this.livro = livro;
         this.usuario = usuario;
         this.dataVencimento = dataVencimento;
-    }
+    }*/
 
     public Usuario getUsuario() {
         return usuario;

@@ -16,48 +16,52 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Emprestimo"
+              $ref: "#/components/schemas/EmprestimoDto"
         required: true
       responses:
         "200":
-          description: "OK"
+          description: "Empréstimo criado com sucesso"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Emprestimo"
+                $ref: "#/components/schemas/EmprestimoDto"
+        "400":
+          description: "Requisição inválida - O corpo do pedido de empréstimo está vazio"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     get:
       summary: "GET api/v1/emprestimo"
-      operationId: "getAllEmprestimos"
+      operationId: "listarEmprestimos"
       responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Emprestimo"
-  /api/v1/emprestimo/{id}:
-    get:
-      summary: "GET api/v1/emprestimo/{id}"
-      operationId: "getEmprestimoById"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-            format: "uuid"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Emprestimo"
+        responses:
+          "200":
+            description: "Empréstimos recuperados com sucesso"
+            content:
+              application/json:
+                schema:
+                  type: "array"
+                  items:
+                    $ref: "#/components/schemas/Emprestimo"
+          "204":
+            description: "Nenhum conteúdo - Nenhum empréstimo encontrado"
+          "500":
+            description: "Erro interno do servidor"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+  /api/v1/emprestimo/devolver/{id}:
     put:
-      summary: "PUT api/v1/emprestimo/{id}"
-      operationId: "updateEmprestimo"
+      summary: "PUT api/v1/emprestimo/devolver/{id}"
+      operationId: "devolverEmprestimo"
       parameters:
         - name: "id"
           in: "path"
@@ -65,22 +69,17 @@ paths:
           schema:
             type: "string"
             format: "uuid"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Emprestimo"
-        required: true
       responses:
         "200":
-          description: "OK"
+          description: "Empréstimo devolvido"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
+  /api/v1/emprestimo/{id}:
     delete:
       summary: "DELETE api/v1/emprestimo/{id}"
-      operationId: "deleteEmprestimo"
+      operationId: "deletarEmprestimo"
       parameters:
         - name: "id"
           in: "path"
@@ -90,15 +89,54 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Empréstimo deletado com sucesso"
+        "400":
+          description: "Requisição inválida - ID de empréstimo não encontrada"
           content:
-            '*/*':
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      summary: "GET api/v1/emprestimo/{id}"
+      operationId: "listarEmprestimoPorId"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Empréstimo encontrado"
+          content:
+            application/json:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
-  /api/v1/emprestimo/{usuario}:
+        "204":
+          description: "Nenhum conteúdo - Empréstimo não encontrado"
+        "400":
+          description: "Requisição inválida - ID de empréstimo inválida"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/emprestimo/usuario/{usuario}:
     get:
-      summary: "GET api/v1/emprestimo/{usuario}"
-      operationId: "getEmprestimoByUsuario"
+      summary: "GET api/v1/emprestimo/usuario/{usuario}"
+      operationId: "listarEmprestimoPorUsuario"
       parameters:
         - name: "usuario"
           in: "path"
@@ -108,14 +146,28 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Empréstimo encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
-  /api/v1/emprestimo/{livro}:
+        "204":
+          description: "Nenhum conteúdo - Empréstimo não encontrado"
+        "400":
+          description: "Requisição inválida - Usuário inválido inválida"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/emprestimo/livro/{livro}:
     get:
-      summary: "GET api/v1/emprestimo/{livro}"
+      summary: "GET api/v1/emprestimo/livro/{livro}"
       operationId: "getEmprestimoByLivro"
       parameters:
         - name: "livro"
@@ -126,11 +178,25 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Empréstimo encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Emprestimo"
+        "204":
+          description: "Nenhum conteúdo - Empréstimo não encontrado"
+        "400":
+          description: "Requisição inválida - Livro inválido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Usuario:
@@ -149,28 +215,6 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/Livro"
-    Livro:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          format: "uuid"
-        emprestado:
-          type: "boolean"
-        titulo:
-          type: "string"
-        autor:
-          type: "string"
-        genero:
-          type: "string"
-        isbn:
-          type: "string"
-        sinopse:
-          type: "string"
-        usuario:
-          $ref: "#/components/schemas/Usuario"
-        emprestimo:
-          $ref: "#/components/schemas/Emprestimo"
     Emprestimo:
       type: "object"
       properties:
@@ -186,3 +230,46 @@ components:
         dataVencimento:
           type: "string"
           format: "date-time"
+    Livro:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        titulo:
+          type: "string"
+        autor:
+          type: "string"
+        genero:
+          type: "string"
+        isbn:
+          type: "string"
+        sinopse:
+          type: "string"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        emprestimo:
+          $ref: "#/components/schemas/Emprestimo"
+    EmprestimoDto:
+      type: "object"
+      properties:
+        livro:
+          $ref: "#/components/schemas/Livro"
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+    HttpHeaders:
+      type: "object"
+      properties: { }
+    ResponseEntity:
+      type: "object"
+      properties:
+        headers:
+          $ref: "#/components/schemas/HttpHeaders"
+      required:
+        - "headers"
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        message:

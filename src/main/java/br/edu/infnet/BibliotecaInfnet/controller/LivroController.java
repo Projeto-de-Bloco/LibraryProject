@@ -1,15 +1,14 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
-import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,110 +17,143 @@ public class LivroController {
     @Autowired
     private LivroService livroService;
     // get livros por usuarioId
-    @PostMapping("/livros/{id}")
-    public ResponseEntity<Object> criarLivro(@RequestBody Livro livro) {
-        ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
 
-        Livro gravado = livroService.criarLivro(livro);
-        retorno = ResponseEntity.status(201).body(gravado);
-        return retorno;
+    @PostMapping("/livros/{id}")
+    public ResponseEntity<?> criarLivro(@RequestBody Livro livro) {
+        try {
+            Livro livroCriado = livroService.criarLivro(livro);
+            return new ResponseEntity(livroCriado, HttpStatus.CREATED);
+        } catch (NullPointerException np) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "O objeto livro está vazio.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/livros")
-    public ResponseEntity<Object> listarLivros() {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
+    public ResponseEntity<?> listarLivros() {
         try {
-            List<Livro> lista = livroService.listarLivros();
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
+            List<Livro> livros = livroService.listarLivros();
+            return new ResponseEntity(livros, HttpStatus.OK);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return retorno;
     }
 
     @PutMapping("/livros/{id}")
-    public ResponseEntity<Object> atualizarLivro(@PathVariable UUID id, @RequestBody Livro livro) {
-        ResponseEntity<Object> retorno = ResponseEntity.badRequest().build();
-
-        if(livro != null && id != null ) {
-            Livro livroGravado = livroService.obterLivro(id);
-            if(livroGravado != null) {
-                try {
-                    livro.setId(id);
-                    livroGravado = livroService.criarLivro(livro);
-                    retorno = ResponseEntity.ok().body(livroGravado);
-                }catch(Exception e) {
-                }
-            }
+    public ResponseEntity<?> atualizarLivro(@PathVariable UUID id, @RequestBody Livro livro) {
+        try {
+            Livro livroModificado = livroService.obterLivro(id);
+            livroService.atualizarLivroPorId(livro);
+            return new ResponseEntity(livroModificado, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do livro não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return retorno;
     }
 
     @DeleteMapping("/livros/{id}")
-    public void deletarLivro(@PathVariable UUID id) {
-        Livro livroDeletado = livroService.obterLivro(id);
-        if(livroDeletado != null) {
-            try {
-                livroService.deletarLivro(id);
-            }catch(Exception e) {
-            }
+    public ResponseEntity<?> deletarLivro(@PathVariable UUID id) {
+        try {
+            livroService.deletarLivro(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do livro não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/livros/autor/{autor}")
-    public ResponseEntity<Object> listarLivrosPorAutor(@PathVariable String autor) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
+    public ResponseEntity<?> listarLivrosPorAutor(@PathVariable String autor) {
         try {
-            List<Livro> lista = livroService.listarLivrosPorAutor(autor);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
+            List<Livro> livros = livroService.listarLivrosPorAutor(autor);
+            return new ResponseEntity(livros, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return retorno;
     }
     @GetMapping("/livros/genero/{genero}")
-    public ResponseEntity<Object> listarLivrosPorGenero(@PathVariable String genero) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
+    public ResponseEntity<?> listarLivrosPorGenero(@PathVariable String genero) {
         try {
-            List<Livro> lista = livroService.listarLivrosPorGenero(genero);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
+            List<Livro> livros = livroService.listarLivrosPorGenero(genero);
+            return new ResponseEntity(livros, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return retorno;
     }
 
     @GetMapping("/livros/id/{id}")
-    public ResponseEntity<Object> obterLivro(@PathVariable UUID id) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
+    public ResponseEntity<?> obterLivro(@PathVariable UUID id) {
         try {
             Livro livro = livroService.obterLivro(id);
-            retorno = ResponseEntity.ok().body(livro);
-        }catch(Exception e) {
+            return new ResponseEntity(livro, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return retorno;
     }
 
     @GetMapping("/livros/titulo/{titulo}")
-    public ResponseEntity<Object> listarLivrosPorTitulo(@PathVariable String titulo) {
-        ResponseEntity<Object> retorno = ResponseEntity.notFound().build();
-
+    public ResponseEntity<?> listarLivrosPorTitulo(@PathVariable String titulo) {
         try {
-            List<Livro> lista = livroService.listarLivrosPorTitulo(titulo);
-            if(!lista.isEmpty()) {
-                retorno = ResponseEntity.ok().body(lista);
-            }
-        }catch(Exception e) {
+            List<Livro> livros = livroService.listarLivrosPorTitulo(titulo);
+            return new ResponseEntity(livros, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return retorno;
     }
 
 }

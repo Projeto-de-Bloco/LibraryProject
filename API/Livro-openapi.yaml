@@ -15,7 +15,7 @@ paths:
       parameters:
         - name: "id"
           in: "path"
-          required: false
+          required: true
       requestBody:
         content:
           application/json:
@@ -24,28 +24,23 @@ paths:
         required: true
       responses:
         "200":
-          description: "OK"
+          description: "Livro criado com sucesso"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
-    get:
-      summary: "GET api/v1/livros/{id}"
-      operationId: "listarPorId"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "string"
-            format: "uuid"
-      responses:
-        "200":
-          description: "OK"
+                $ref: "#/components/schemas/Livro"
+        "400":
+          description: "Requisição inválida - ID do livro não encontrada"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     put:
       summary: "PUT api/v1/livros/{id}"
       operationId: "atualizarLivro"
@@ -64,14 +59,26 @@ paths:
         required: true
       responses:
         "200":
-          description: "OK"
+          description: "Livro atualizado"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
+                $ref: "#/components/schemas/Livro"
+        "400":
+          description: "Requisição inválida - ID de Livro não encontrada"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       summary: "DELETE api/v1/livros/{id}"
-      operationId: "deletarLivroById"
+      operationId: "deletarLivro"
       parameters:
         - name: "id"
           in: "path"
@@ -81,22 +88,44 @@ paths:
             format: "uuid"
       responses:
         "200":
-          description: "OK"
+          description: "Livro deletado com sucesso"
+        "400":
+          description: "Requisição inválida - ID de livro não encontrada"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/v1/livros:
     get:
       summary: "GET api/v1/livros"
       operationId: "listarLivros"
       responses:
         "200":
-          description: "OK"
+          description: "Livros recuperados com sucesso"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
-  /api/v1/livros/{autor}:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Livro"
+        "204":
+          description: "Nenhum conteúdo - Nenhum livro encontrado"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/livros/autor/{autor}:
     get:
-      summary: "GET api/v1/livros/{autor}"
-      operationId: "listarPorAutor"
+      summary: "GET api/v1/livros/autor/{autor}"
+      operationId: "listarLivrosPorAutor"
       parameters:
         - name: "autor"
           in: "path"
@@ -105,15 +134,29 @@ paths:
             type: "string"
       responses:
         "200":
-          description: "OK"
+          description: "Livro encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
-  /api/v1/livros/{genero}:
+                $ref: "#/components/schemas/Livro"
+        "204":
+          description: "Nenhum conteúdo - Livro não encontrado"
+        "400":
+          description: "Requisição inválida - Autor inválido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/livros/genero/{genero}:
     get:
-      summary: "GET api/v1/livros/{genero}"
-      operationId: "listarPorGenero"
+      summary: "GET api/v1/livros/genero/{genero}"
+      operationId: "listarLivrosPorGenero"
       parameters:
         - name: "genero"
           in: "path"
@@ -122,15 +165,61 @@ paths:
             type: "string"
       responses:
         "200":
-          description: "OK"
+          description: "Livro encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
-  /api/v1/livros/{titulo}:
+                $ref: "#/components/schemas/Livro"
+        "204":
+          description: "Nenhum conteúdo - Livro não encontrado"
+        "400":
+          description: "Requisição inválida - Gênero inválido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/livros/id/{id}:
     get:
-      summary: "GET api/v1/livros/{titulo}"
-      operationId: "listarPorTitulo"
+      summary: "GET api/v1/livros/id/{id}"
+      operationId: "obterLivro"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Livro encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Livro"
+        "204":
+          description: "Nenhum conteúdo - Livro não encontrado"
+        "400":
+          description: "Requisição inválida - ID do livro inválida"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/livros/titulo/{titulo}:
+    get:
+      summary: "GET api/v1/livros/titulo/{titulo}"
+      operationId: "listarLivrosPorTitulo"
       parameters:
         - name: "titulo"
           in: "path"
@@ -139,11 +228,25 @@ paths:
             type: "string"
       responses:
         "200":
-          description: "OK"
+          description: "Livro encontrado"
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: "#/components/schemas/Object"
+                $ref: "#/components/schemas/Livro"
+        "204":
+          description: "Nenhum conteúdo - Livro não encontrado"
+        "400":
+          description: "Requisição inválida - Título inválido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Usuario:
@@ -183,8 +286,6 @@ components:
         id:
           type: "string"
           format: "uuid"
-        emprestado:
-          type: "boolean"
         titulo:
           type: "string"
         autor:
@@ -199,6 +300,19 @@ components:
           $ref: "#/components/schemas/Usuario"
         emprestimo:
           $ref: "#/components/schemas/Emprestimo"
-    Object:
+    HttpHeaders:
       type: "object"
       properties: { }
+    ResponseEntity:
+      type: "object"
+      properties:
+        headers:
+          $ref: "#/components/schemas/HttpHeaders"
+      required:
+        - "headers"
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        message:

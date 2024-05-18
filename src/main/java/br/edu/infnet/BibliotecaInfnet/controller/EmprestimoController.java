@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,66 +27,124 @@ public class EmprestimoController {
     private NotifyService notifyService;
 
     @PostMapping("/emprestimo")
-    public ResponseEntity<Emprestimo> criarEmprestimo(@RequestBody EmprestimoDto emprestimoDto) throws JsonProcessingException {
-        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(emprestimoDto.getLivro().getId());
-        if (!emprestimos.isEmpty()){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        else {
+    public ResponseEntity<?> criarEmprestimo(@RequestBody EmprestimoDto emprestimoDto) {
+        try {
             Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimoDto);
-            notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimoCriado.toString());
+            //notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimoCriado.toString());
             return new ResponseEntity(emprestimoCriado, HttpStatus.CREATED);
+        } catch (NullPointerException np) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "O corpo do pedido de empréstimo está vazio.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/emprestimo")
-    public ResponseEntity<List<Emprestimo>> listarEmprestimos() {
-        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimos();
-        return new ResponseEntity(emprestimos, HttpStatus.OK);
+    public ResponseEntity<?> listarEmprestimos() {
+        try {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimos();
+            return new ResponseEntity(emprestimos, HttpStatus.OK);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/emprestimo/devolver/{id}")
-    public  ResponseEntity<Emprestimo> devolverEmprestimo(@PathVariable UUID id) throws JsonProcessingException {
-        Emprestimo emprestimo = emprestimoService.devolverEmprestimo(id);
-        notifyService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
-
-        return new ResponseEntity(emprestimo, HttpStatus.OK);
+    public  ResponseEntity<?> devolverEmprestimo(@PathVariable UUID id) {
+        try {
+            Emprestimo emprestimo = emprestimoService.devolverEmprestimo(id);
+            //notifyService.notificar("EmprestimoController.atualizarEmprestimo", emprestimo.toString());
+            return new ResponseEntity(emprestimo, HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> deletarEmprestimo(@PathVariable UUID id) {
-        emprestimoService.deletarEmprestimo(id);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<?> deletarEmprestimo(@PathVariable UUID id) {
+        try {
+            emprestimoService.deletarEmprestimo(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> listarEmprestimoPorId(@PathVariable("id") UUID id) {
-        Emprestimo emprestimo = emprestimoService.listarEmprestimosPorId(id);
-        if (emprestimo != null) {
+    public ResponseEntity<?> listarEmprestimoPorId(@PathVariable("id") UUID id) {
+        try {
+            Emprestimo emprestimo = emprestimoService.listarEmprestimosPorId(id);
             return new ResponseEntity(emprestimo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do empréstimo não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/emprestimo/usuario/{usuario}")
-    public ResponseEntity<Emprestimo> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
-        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
-        if (emprestimos != null) {
+    public ResponseEntity<?> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
+        try {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
             return new ResponseEntity(emprestimos, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de usuário não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/emprestimo/livro/{livro}")
-    public ResponseEntity<Emprestimo> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
-        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);
-        if (emprestimos != null) {
+    public ResponseEntity<?> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
+        try {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);
             return new ResponseEntity(emprestimos, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID do livro não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
