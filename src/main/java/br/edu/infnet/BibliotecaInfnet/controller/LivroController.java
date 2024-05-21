@@ -155,5 +155,19 @@ public class LivroController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/livros/{id}/solicitar-emprestimo")
+    public ResponseEntity<Object> solicitarEmprestimo(@PathVariable UUID id) {
+        Livro livro = livroService.obterLivro(id);
+        if (livro == null) {
+            return ResponseEntity.notFound().build();
+        }
 
+        if (livro.getEmprestado()) {
+            return ResponseEntity.badRequest().body("Livro já emprestado.");
+        }
+
+        livroService.solicitarEmprestimo(livro, livro.getUsuario());
+
+        return ResponseEntity.ok("Solicitação de empréstimo realizada com sucesso.");
+    }
 }
