@@ -17,7 +17,6 @@ public class Livro {
     private String genero;
     private String isbn;
     private String sinopse;
-    private Boolean emprestado;
 
 
 
@@ -26,13 +25,6 @@ public class Livro {
     private Usuario usuario;
     @OneToOne( mappedBy = "livro", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Emprestimo emprestimo;
-    public Boolean getEmprestado() {
-        return emprestado;
-    }
-
-    public void setEmprestado(Boolean emprestado) {
-        this.emprestado = emprestado;
-    }
 
 
     public UUID getId() {

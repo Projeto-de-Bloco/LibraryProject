@@ -19,15 +19,11 @@ public class LivroService {
     @Autowired
     private LivroRepository livroRepository;
 
-    @Autowired
-    private EmprestimoRepository emprestimoRepository;
-
-
-
 
     public Livro criarLivro(Livro livro) {
         return livroRepository.save(livro);
     }
+
     public Livro atualizarLivroPorId(Livro livro) {
         if (livro.getId() != null && livroRepository.existsById(livro.getId())) {
             return livroRepository.save(livro);
@@ -38,15 +34,19 @@ public class LivroService {
     public List<Livro> listarLivros() {
         return (List<Livro>) livroRepository.findAll();
     }
+
     public Livro obterLivro(UUID id) {
         return livroRepository.findById(id).orElse(null);
     }
+
     public List<Livro> listarLivrosPorAutor(String autor) {
         return livroRepository.findByAutor(autor);
     }
+
     public List<Livro> listarLivrosPorTitulo(String titulo) {
         return livroRepository.findByTitulo(titulo);
     }
+
     public List<Livro> listarLivrosPorGenero(String genero) {
         return livroRepository.findByGenero(genero);
     }
@@ -54,22 +54,7 @@ public class LivroService {
     public void deletarLivro(UUID id) {
         livroRepository.deleteById(id);
     }
-    public void solicitarEmprestimo(Livro livro, Usuario usuario) {
-        if (!livro.getEmprestado()) {
-            livro.setEmprestado(true);
-            livroRepository.save(livro);
 
-            Emprestimo emprestimo = new Emprestimo();
-            emprestimo.setLivro(livro);
-            emprestimo.setUsuario(usuario);
-            emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
-            emprestimo.setAtivo(true);
-            emprestimoRepository.save(emprestimo);
-
-        } else {
-            throw new LivroNaoDisponivelException("Livro já emprestado.");
-        }
-    }
 
 
 }

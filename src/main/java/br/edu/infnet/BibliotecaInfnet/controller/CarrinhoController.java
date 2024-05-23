@@ -18,7 +18,7 @@ public class CarrinhoController {
     @Autowired
     private CarrinhoService carrinhoService;
 
-    @PostMapping(value = "/carrinho/{id}")
+    @PostMapping(value = "/carrinho")
     public ResponseEntity<?> criarCarrinho(@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);

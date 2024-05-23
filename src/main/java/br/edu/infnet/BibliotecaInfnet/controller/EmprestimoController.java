@@ -4,6 +4,7 @@ import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
+import br.edu.infnet.BibliotecaInfnet.model.service.NotificacaoService;
 import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,16 +22,11 @@ public class EmprestimoController {
 
     @Autowired
     private EmprestimoService emprestimoService;
-    @Autowired
-    private LivroService livroService;
-    @Autowired
-    private NotifyService notifyService;
 
     @PostMapping("/emprestimo")
     public ResponseEntity<?> criarEmprestimo(@RequestBody EmprestimoDto emprestimoDto) {
         try {
             Emprestimo emprestimoCriado = emprestimoService.criarEmprestimo(emprestimoDto);
-            //notifyService.notificar("EmprestimoController.criarEmprestimo", emprestimoCriado.toString());
             return new ResponseEntity(emprestimoCriado, HttpStatus.CREATED);
         } catch (NullPointerException np) {
             Map<String, Object> errorResponse = new HashMap<>();
@@ -112,7 +108,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/usuario/{usuario}")
+    @GetMapping("/emprestimo/{usuario}")
     public ResponseEntity<?> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
         try {
             List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
@@ -130,7 +126,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/livro/{livro}")
+    @GetMapping("/emprestimo/{livro}")
     public ResponseEntity<?> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
         try {
             List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);

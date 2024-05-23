@@ -16,9 +16,8 @@ import java.util.*;
 public class LivroController {
     @Autowired
     private LivroService livroService;
-    // get livros por usuarioId
 
-    @PostMapping("/livros/{id}")
+    @PostMapping("/livros")
     public ResponseEntity<?> criarLivro(@RequestBody Livro livro) {
         try {
             Livro livroCriado = livroService.criarLivro(livro);
@@ -85,7 +84,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/autor/{autor}")
+    @GetMapping("/livros/{autor}")
     public ResponseEntity<?> listarLivrosPorAutor(@PathVariable String autor) {
         try {
             List<Livro> livros = livroService.listarLivrosPorAutor(autor);
@@ -102,7 +101,7 @@ public class LivroController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/livros/genero/{genero}")
+    @GetMapping("/livros/{genero}")
     public ResponseEntity<?> listarLivrosPorGenero(@PathVariable String genero) {
         try {
             List<Livro> livros = livroService.listarLivrosPorGenero(genero);
@@ -120,7 +119,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/id/{id}")
+    @GetMapping("/livros/{id}")
     public ResponseEntity<?> obterLivro(@PathVariable UUID id) {
         try {
             Livro livro = livroService.obterLivro(id);
@@ -138,7 +137,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/titulo/{titulo}")
+    @GetMapping("/livros/{titulo}")
     public ResponseEntity<?> listarLivrosPorTitulo(@PathVariable String titulo) {
         try {
             List<Livro> livros = livroService.listarLivrosPorTitulo(titulo);
@@ -155,19 +154,5 @@ public class LivroController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/livros/{id}/solicitar-emprestimo")
-    public ResponseEntity<Object> solicitarEmprestimo(@PathVariable UUID id) {
-        Livro livro = livroService.obterLivro(id);
-        if (livro == null) {
-            return ResponseEntity.notFound().build();
-        }
 
-        if (livro.getEmprestado()) {
-            return ResponseEntity.badRequest().body("Livro já emprestado.");
-        }
-
-        livroService.solicitarEmprestimo(livro, livro.getUsuario());
-
-        return ResponseEntity.ok("Solicitação de empréstimo realizada com sucesso.");
-    }
 }
