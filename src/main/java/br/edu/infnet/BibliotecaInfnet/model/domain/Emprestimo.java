@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "tb_emprestimo")
@@ -31,7 +30,7 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
-    public Emprestimo() {
+    public Emprestimo(UUID uuid, boolean b, Livro livro, Usuario usuario, LocalDateTime localDateTime) {
     }
 
 
