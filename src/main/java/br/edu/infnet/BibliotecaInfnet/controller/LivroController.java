@@ -84,7 +84,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/{autor}")
+    @GetMapping("/livros/autores/{autor}")
     public ResponseEntity<?> listarLivrosPorAutor(@PathVariable String autor) {
         try {
             List<Livro> livros = livroService.listarLivrosPorAutor(autor);
@@ -101,7 +101,7 @@ public class LivroController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/livros/{genero}")
+    @GetMapping("/livros/generos/{genero}")
     public ResponseEntity<?> listarLivrosPorGenero(@PathVariable String genero) {
         try {
             List<Livro> livros = livroService.listarLivrosPorGenero(genero);
@@ -137,7 +137,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/livros/{titulo}")
+    @GetMapping("/livros/titulos/{titulo}")
     public ResponseEntity<?> listarLivrosPorTitulo(@PathVariable String titulo) {
         try {
             List<Livro> livros = livroService.listarLivrosPorTitulo(titulo);

@@ -10,10 +10,16 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_emprestimo")
+@NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class Emprestimo {
 
     @Id
@@ -30,9 +36,8 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
-    public Emprestimo(UUID uuid, boolean b, Livro livro, Usuario usuario, LocalDateTime localDateTime) {
-    }
-
+    //public Emprestimo(UUID uuid, boolean b, Livro livro, Usuario usuario, LocalDateTime localDateTime) {
+    //}
 
 
     /*public Emprestimo(UUID id, Boolean ativo, Livro livro, Usuario usuario, LocalDateTime dataVencimento) {
@@ -42,14 +47,6 @@ public class Emprestimo {
         this.usuario = usuario;
         this.dataVencimento = dataVencimento;
     }*/
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
     @Override
     public String toString() {
@@ -62,37 +59,4 @@ public class Emprestimo {
                 '}';
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
-        this.livro = livro;
-    }
-
-
-
-    public LocalDateTime getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDateTime dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
 }

@@ -18,7 +18,7 @@ public class CarrinhoController {
     @Autowired
     private CarrinhoService carrinhoService;
 
-    @PostMapping(value = "/carrinho")
+    @PostMapping(value = "/carrinhos")
     public ResponseEntity<?> criarCarrinho(@PathVariable("id") UUID usuario_id){
         try{
             Carrinho carrinho = carrinhoService.criarCarrinho(usuario_id);
@@ -36,7 +36,7 @@ public class CarrinhoController {
         }
     }
 
-    @GetMapping("/carrinho")
+    @GetMapping("/carrinhos")
     public ResponseEntity<?> listarCarrinhos() {
         try {
             List<Carrinho> carrinhos = carrinhoService.listarCarrinhos();
@@ -54,7 +54,7 @@ public class CarrinhoController {
         }
     }
 
-    @DeleteMapping(value = "carrinho/{id}")
+    @DeleteMapping(value = "carrinhos/{id}")
     public ResponseEntity<?> deletarCarrinho(@PathVariable("id") UUID id){
         try {
             carrinhoService.deletarCarrinho(id);
@@ -73,7 +73,7 @@ public class CarrinhoController {
         }
     }
 
-    @GetMapping(value = "carrinho/{id}")
+    @GetMapping(value = "carrinhos/{id}")
     public ResponseEntity<?> listarCarrinhosPorId(@PathVariable("id") UUID id){
         try{
             Carrinho carrinho = carrinhoService.listarCarrinhosPorId(id);

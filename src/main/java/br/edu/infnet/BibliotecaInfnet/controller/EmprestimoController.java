@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 @RestController
@@ -35,6 +36,7 @@ public class EmprestimoController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
+            e.printStackTrace();
             errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
             errorResponse.put("message", "Erro interno do servidor");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -48,6 +50,7 @@ public class EmprestimoController {
             return new ResponseEntity(emprestimos, HttpStatus.OK);
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
+            e.printStackTrace();
             errorResponse.put("message", "Erro interno do servidor");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -108,7 +111,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/{usuario}")
+    @GetMapping("/emprestimo/usuario/{usuario}")
     public ResponseEntity<?> listarEmprestimoPorUsuario(@PathVariable("usuario") UUID id_usuario) {
         try {
             List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorUsuario(id_usuario);
@@ -126,7 +129,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/emprestimo/{livro}")
+    @GetMapping("/emprestimo/livro/{livro}")
     public ResponseEntity<?> getEmprestimoByLivro(@PathVariable("livro") UUID id_livro) {
         try {
             List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(id_livro);

@@ -1,6 +1,10 @@
 package br.edu.infnet.BibliotecaInfnet.model.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
@@ -8,7 +12,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_usuario")
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class Usuario {
 
     @Id
@@ -23,52 +30,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Emprestimo> emprestimos;
 
-    public void criar(String nome) {
-        this.setNome(nome);
-
-    }
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public List<Livro> getMeusLivros() {
-        return meusLivros;
-    }
-
-    public void setMeusLivros(List<Livro> meusLivros) {
-        this.meusLivros = meusLivros;
-    }
-    @Override
+    /*@Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -77,5 +39,5 @@ public class Usuario {
                 ", senha='" + senha + '\'' +
                 ", meusLivros=" + meusLivros +
                 ", emprestimos=" + emprestimos + '}';
-    }
+    }*/
 }
