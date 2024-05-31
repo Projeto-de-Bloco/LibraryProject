@@ -34,29 +34,6 @@ public class Emprestimo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-    private LocalDateTime dataVencimento;
-
-    //public Emprestimo(UUID uuid, boolean b, Livro livro, Usuario usuario, LocalDateTime localDateTime) {
-    //}
-
-
-    /*public Emprestimo(UUID id, Boolean ativo, Livro livro, Usuario usuario, LocalDateTime dataVencimento) {
-        this.id = id;
-        this.ativo = ativo;
-        this.livro = livro;
-        this.usuario = usuario;
-        this.dataVencimento = dataVencimento;
-    }*/
-
-    @Override
-    public String toString() {
-        return "Emprestimo{" +
-                "id=" + id +
-                ", ativo=" + ativo +
-                ", livro=" + livro +
-                ", usuario=" + usuario +
-                ", dataVencimento=" + dataVencimento +
-                '}';
-    }
+    private LocalDateTime dataVencimento = LocalDateTime.now().plusDays(10);
 
 }

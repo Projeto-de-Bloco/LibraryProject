@@ -3,17 +3,12 @@ package br.edu.infnet.BibliotecaInfnet.controller;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.service.EmprestimoService;
-import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
-import br.edu.infnet.BibliotecaInfnet.model.service.NotificacaoService;
-import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 @RestController
@@ -94,9 +89,9 @@ public class EmprestimoController {
     }
 
     @GetMapping("/emprestimo/{id}")
-    public ResponseEntity<?> listarEmprestimoPorId(@PathVariable("id") UUID id) {
+    public ResponseEntity<?> buscarEmprestimoPorId(@PathVariable("id") UUID id) {
         try {
-            Emprestimo emprestimo = emprestimoService.listarEmprestimosPorId(id);
+            Emprestimo emprestimo = emprestimoService.buscarEmprestimoPorId(id);
             return new ResponseEntity(emprestimo, HttpStatus.OK);
         } catch (NoSuchElementException ns) {
             Map<String, Object> errorResponse = new HashMap<>();

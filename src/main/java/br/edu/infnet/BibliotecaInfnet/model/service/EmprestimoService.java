@@ -2,9 +2,11 @@ package br.edu.infnet.BibliotecaInfnet.model.service;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
+import br.edu.infnet.BibliotecaInfnet.model.domain.Notificacao;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.repository.EmprestimoRepository;
+import br.edu.infnet.BibliotecaInfnet.model.repository.NotificacaoRepository;
 import br.edu.infnet.BibliotecaInfnet.notification.Notify;
 import br.edu.infnet.BibliotecaInfnet.notification.NotifyAzureServiceBus;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,33 +23,58 @@ public class EmprestimoService {
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
+
     @Autowired
-    private  NotificacaoService notificacaoService;
+    private NotificacaoRepository notificacaoRepository;
+
 
     public Emprestimo criarEmprestimo(EmprestimoDto emprestimoDto) {
-        Emprestimo emprestimo = new Emprestimo(UUID.randomUUID(), true, emprestimoDto.getLivro(), emprestimoDto.getUsuario(), LocalDateTime.now().plusDays(7));
+        LocalDateTime dataVencimento = emprestimoDto.getLivro().getEmprestimo().getDataVencimento();
+
+        Emprestimo emprestimo = new Emprestimo(UUID.randomUUID(), true, emprestimoDto.getLivro(), emprestimoDto.getUsuario(),
+                dataVencimento);
+
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
 
-        Usuario usuario = emprestimoDto.getUsuario();
-        Livro livro = emprestimoDto.getLivro();
-        Usuario donoLivro = livro.getUsuario();
+        UUID donoLivro = emprestimoDto.getLivro().getUsuario().getId();
+        UUID locatarioLivro = emprestimoDto.getUsuario().getId();
+        String tituloLivro = emprestimoDto.getLivro().getTitulo();
 
-        String usuarioId = usuario.getId().toString();
-        String livroId = livro.getId().toString();
-        String donoLivroId = donoLivro.getId().toString();
+        Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
+                "Empréstimo do livro " + tituloLivro + " realizado!" ,
+                tituloLivro, LocalDateTime.now(), dataVencimento);
 
+        Notificacao notificacaoFinalEmprestimo = new Notificacao(locatarioLivro, donoLivro,
+                "O limite do empréstimo do livro " +tituloLivro+ " acaba amanhã! Fique ligado!", tituloLivro, LocalDateTime.now(), dataVencimento.minusDays(1) );
 
-        String mensagemDono = "Seu livro (ID: " + livroId + ") foi emprestado pelo usuário " + usuarioId;
-        notificacaoService.enviarNotificacao(donoLivroId, "Empréstimo de Livro", mensagemDono);
-
-        String mensagemUsuario = "Você emprestou o livro (ID: " + livroId + ")";
-        notificacaoService.enviarNotificacao(usuarioId, "Empréstimo de Livro", mensagemUsuario);
+        notificacaoRepository.save(notificacaoFinalEmprestimo);
+        notificacaoRepository.save(notificacao);
 
         return emprestimoSalvo;
 
     }
 
-    public Emprestimo listarEmprestimosPorId(UUID id) {
+    public Emprestimo devolverEmprestimo(UUID id) {
+        Emprestimo emprestimo = this.buscarEmprestimoPorId(id);
+        emprestimo.setAtivo(false);
+        emprestimo.setDataVencimento(LocalDateTime.now());
+
+        UUID donoLivro = emprestimo.getLivro().getUsuario().getId();
+        UUID locatarioLivro = emprestimo.getUsuario().getId();
+        String tituloLivro = emprestimo.getLivro().getTitulo();
+
+        Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
+                "Devolução do livro " + tituloLivro + " realizada!" ,
+                tituloLivro, LocalDateTime.now(), null );
+
+
+        notificacaoRepository.save(notificacao);
+
+
+        return this.atualizarEmprestimo(emprestimo);
+    }
+
+    public Emprestimo buscarEmprestimoPorId(UUID id) {
 
         return emprestimoRepository.findById(id).orElse(null);
     }
@@ -65,26 +92,7 @@ public class EmprestimoService {
         return emprestimoRepository.findAll();
     }
 
-    public Emprestimo devolverEmprestimo(UUID id) {
-        Emprestimo emprestimo = this.listarEmprestimosPorId(id);
-        emprestimo.setAtivo(false);
 
-        Livro livro = emprestimo.getLivro();
-        Usuario usuario = emprestimo.getUsuario();
-        Usuario donoLivro = livro.getUsuario();
-
-        String usuarioId = usuario.getId().toString();
-        String livroId = livro.getId().toString();
-        String donoLivroId = donoLivro.getId().toString();
-
-        String mensagemDono = "Seu livro (ID: " + livroId + ") foi devolvido pelo usuário " + usuarioId;
-        notificacaoService.enviarNotificacao(donoLivroId, "Devolução de Livro", mensagemDono);
-
-        String mensagemUsuario = "Você devolveu o livro (ID: " + livroId + ")";
-        notificacaoService.enviarNotificacao(usuarioId, "Devolução de Livro", mensagemUsuario);
-
-        return this.atualizarEmprestimo(emprestimo);
-    }
     public Emprestimo atualizarEmprestimo(Emprestimo emprestimo) {
         if (emprestimo.getId() != null && emprestimoRepository.existsById(emprestimo.getId())) {
             return emprestimoRepository.save(emprestimo);
