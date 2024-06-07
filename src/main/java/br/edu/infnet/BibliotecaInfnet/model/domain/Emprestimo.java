@@ -34,6 +34,6 @@ public class Emprestimo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-    private LocalDateTime dataVencimento = LocalDateTime.now().plusDays(10);
+    private LocalDateTime dataVencimento;
 
 }
