@@ -1,7 +1,9 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
+import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.service.LivroService;
+import br.edu.infnet.BibliotecaInfnet.model.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,14 @@ import java.util.*;
 public class LivroController {
     @Autowired
     private LivroService livroService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PostMapping("/livros")
     public ResponseEntity<?> criarLivro(@RequestBody Livro livro) {
         try {
+            Usuario dono = usuarioService.obterUsuario(livro.getDono().getId());
+            livro.setDono(dono);
             Livro livroCriado = livroService.criarLivro(livro);
             return new ResponseEntity(livroCriado, HttpStatus.CREATED);
         } catch (NullPointerException np) {
