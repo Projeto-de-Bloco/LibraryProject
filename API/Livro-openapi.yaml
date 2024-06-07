@@ -8,9 +8,9 @@ servers:
 tags:
   - name: "Biblioteca INFNET - LivroController"
 paths:
-  /api/v1/livros/{id}:
+  /api/v1/livros:
     post:
-      summary: "POST api/v1/livros/{id}"
+      summary: "POST api/v1/livros"
       operationId: "criarLivro"
       parameters:
         - name: "id"
@@ -101,27 +101,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /api/v1/livros:
-    get:
-      summary: "GET api/v1/livros"
-      operationId: "listarLivros"
-      responses:
-        "200":
-          description: "Livros recuperados com sucesso"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Livro"
-        "204":
-          description: "Nenhum conteúdo - Nenhum livro encontrado"
-        "500":
-          description: "Erro interno do servidor"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
+      get:
+        summary: "GET api/v1/livros"
+        operationId: "listarLivros"
+        responses:
+          "200":
+            description: "Livros recuperados com sucesso"
+            content:
+              application/json:
+                schema:
+                  type: "array"
+                  items:
+                    $ref: "#/components/schemas/Livro"
+          "204":
+            description: "Nenhum conteúdo - Nenhum livro encontrado"
+          "500":
+            description: "Erro interno do servidor"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
   /api/v1/livros/autor/{autor}:
     get:
       summary: "GET api/v1/livros/autor/{autor}"
