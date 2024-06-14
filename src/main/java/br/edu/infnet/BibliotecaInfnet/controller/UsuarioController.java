@@ -82,4 +82,20 @@ public class UsuarioController {
                     .body("Erro ao obter usuário por ID: " + e.getMessage());
         }
     }
+
+    @PostMapping("/usuarios/login")
+    public ResponseEntity<Object> login(@RequestBody Usuario usuario) {
+        try {
+            Usuario user = usuarioService.login(usuario.getEmail(), usuario.getPassword());
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Credenciais inválidas");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao realizar login: " + e.getMessage());
+        }
+    }
 }

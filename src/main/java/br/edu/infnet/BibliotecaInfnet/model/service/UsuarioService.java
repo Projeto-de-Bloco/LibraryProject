@@ -39,4 +39,13 @@ public class UsuarioService {
     public void deletarUsuario(UUID id) {
         usuarioRepository.deleteById(id);
     }
+
+    public Usuario login(String email, String password) {
+        Usuario user = usuarioRepository.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        } else {
+            return null;
+        }
+    }
 }
