@@ -1,6 +1,7 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
+import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
 import br.edu.infnet.BibliotecaInfnet.model.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.BadRequestException;
@@ -19,6 +20,7 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
 
     @PostMapping("/usuarios")
     public ResponseEntity<Object> criarUsuario(@RequestBody Usuario usuario) {

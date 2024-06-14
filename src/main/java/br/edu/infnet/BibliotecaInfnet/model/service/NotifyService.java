@@ -18,9 +18,9 @@ public class NotifyService {
         serviceBus.sendMessage(notify);
     }
 
-    public void enviarComandoNotificacao(String acao, String dados) throws JsonProcessingException {
+    public void enviarComandoNotificacao(String acao) throws JsonProcessingException {
         NotifyCommandService commandService = new NotifyCommandService();
-        commandService.enviarComando(acao, dados);
+        commandService.enviarComando(acao);
     }
 
     public void enviarConsultaNotificacao(String criterio) throws JsonProcessingException, com.azure.json.implementation.jackson.core.JsonProcessingException {
