@@ -108,7 +108,7 @@ public class EmprestimoService {
     public Emprestimo renovarEmprestimo(UUID id) {
 
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
-        if (emprestimo != null && emprestimo.isAtivo()) {
+        if (emprestimo != null && emprestimo.getAtivo()) {
 
             emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
             emprestimo = atualizarEmprestimo(emprestimo);

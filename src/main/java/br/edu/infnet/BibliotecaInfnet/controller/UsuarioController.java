@@ -86,7 +86,7 @@ public class UsuarioController {
     @PostMapping("/usuarios/login")
     public ResponseEntity<Object> login(@RequestBody Usuario usuario) {
         try {
-            Usuario user = usuarioService.login(usuario.getEmail(), usuario.getPassword());
+            Usuario user = usuarioService.login(usuario.getEmail(), usuario.getSenha());
             if (user != null) {
                 return ResponseEntity.ok(user);
             } else {

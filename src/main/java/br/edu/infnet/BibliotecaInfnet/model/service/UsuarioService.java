@@ -41,8 +41,8 @@ public class UsuarioService {
     }
 
     public Usuario login(String email, String password) {
-        Usuario user = usuarioRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
+        Usuario user = usuarioRepository.findByEmail(email).stream().findFirst().orElse(null);
+        if (user != null && user.getSenha().equals(password)) {
             return user;
         } else {
             return null;
