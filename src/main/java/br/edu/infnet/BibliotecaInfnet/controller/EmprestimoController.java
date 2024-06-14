@@ -141,4 +141,23 @@ public class EmprestimoController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/emprestimo/renovar/{id}")
+    public ResponseEntity<?> renovarEmprestimo(@PathVariable UUID id) {
+        try {
+            Emprestimo emprestimoRenovado = emprestimoService.renovarEmprestimo(id);
+            if (emprestimoRenovado != null) {
+            return new ResponseEntity<>(emprestimoRenovado, HttpStatus.OK);
+            } else {
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "Empréstimo não encontrado");    
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
