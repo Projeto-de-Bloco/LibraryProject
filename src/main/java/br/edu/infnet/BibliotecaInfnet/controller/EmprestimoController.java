@@ -147,11 +147,12 @@ public class EmprestimoController {
         try {
             Emprestimo emprestimoRenovado = emprestimoService.renovarEmprestimo(id);
             if (emprestimoRenovado != null) {
-            return new ResponseEntity<>(emprestimoRenovado, HttpStatus.OK);
+                return new ResponseEntity<>(emprestimoRenovado, HttpStatus.OK);
             } else {
-            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
-            errorResponse.put("message", "Empréstimo não encontrado");    
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+                errorResponse.put("message", "Empréstimo não encontrado");    
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();

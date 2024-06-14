@@ -110,22 +110,22 @@ public class EmprestimoService {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
         if (emprestimo != null && emprestimo.isAtivo()) {
 
-        emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
-        emprestimo = atualizarEmprestimo(emprestimo);
+            emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
+            emprestimo = atualizarEmprestimo(emprestimo);
 
-        UUID donoLivro = emprestimo.getLivro().getDono().getId();
-        UUID locatarioLivro = emprestimo.getUsuario().getId();
-        String tituloLivro = emprestimo.getLivro().getTitulo();
+            UUID donoLivro = emprestimo.getLivro().getDono().getId();
+            UUID locatarioLivro = emprestimo.getUsuario().getId();
+            String tituloLivro = emprestimo.getLivro().getTitulo();
 
-        Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
-            "Empréstimo do livro " + tituloLivro + " renovado!",
-            tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
+            Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
+                "Empréstimo do livro " + tituloLivro + " renovado!",
+                tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
 
-        notificacaoRepository.save(notificacao);
+            notificacaoRepository.save(notificacao);
 
-        return emprestimo;
+            return emprestimo;
         } else {
-        return null;
+            return null;
         }
     }
 
