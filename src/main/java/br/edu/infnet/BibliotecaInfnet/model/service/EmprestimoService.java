@@ -105,6 +105,30 @@ public class EmprestimoService {
         }
     }
 
+    public Emprestimo renovarEmprestimo(UUID id) {
+
+        Emprestimo emprestimo = buscarEmprestimoPorId(id);
+        if (emprestimo != null && emprestimo.isAtivo()) {
+
+            emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
+            emprestimo = atualizarEmprestimo(emprestimo);
+
+            UUID donoLivro = emprestimo.getLivro().getDono().getId();
+            UUID locatarioLivro = emprestimo.getUsuario().getId();
+            String tituloLivro = emprestimo.getLivro().getTitulo();
+
+            Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
+                "Empréstimo do livro " + tituloLivro + " renovado!",
+                tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
+
+            notificacaoRepository.save(notificacao);
+
+            return emprestimo;
+        } else {
+            return null;
+        }
+    }
+
     public void deletarEmprestimo(UUID id) throws JsonProcessingException {
 
         notifyService.enviarComandoNotificacao("Deletar emprestimo");
