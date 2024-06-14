@@ -90,4 +90,40 @@ public class CarrinhoController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping(value = "carrinhos/{idCarrinho}/adicionar/{idLivro}")
+    public ResponseEntity<?> adicionarLivroNoCarrinho(@PathVariable("idCarrinho") UUID idCarrinho, @PathVariable("idLivro") UUID idLivro){
+        try{
+            carrinhoService.adicionarLivroAoCarrinho(idCarrinho, idLivro);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de livro ou carrinho não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping(value = "carrinhos/{idCarrinho}/remover/{idLivro}")
+    public ResponseEntity<?> removerLivroDoCarrinho(@PathVariable("idCarrinho") UUID idCarrinho, @PathVariable("idLivro") UUID idLivro){
+        try{
+            carrinhoService.removerLivroDoCarrinho(idCarrinho, idLivro);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException ns) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
+            errorResponse.put("message", "ID de livro ou carrinho não encontrado");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Erro interno do servidor");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
