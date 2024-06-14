@@ -102,6 +102,7 @@ post:
     summary: "GET api/v1/usuarios/{id}"
     operationId: "getUserById"
     parameters:
+      -
       - name: "id"
         in: "path"
         required: true
