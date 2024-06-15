@@ -25,13 +25,11 @@ public class CarrinhoService {
     @Autowired
     private NotifyService notifyService;
 
-    public Carrinho criarCarrinho(UUID user_id) throws JsonProcessingException {
+    public Carrinho criarCarrinho(UUID user_id){
         Carrinho carrinho = new Carrinho();
         Usuario usuario = new Usuario();
         usuario.setId(user_id);
         carrinho.setUsuario(usuario);
-        notifyService.enviarComandoNotificacao("Criar carrinho");
-
         return carrinhoRepository.save(carrinho);
     }
 
@@ -39,9 +37,7 @@ public class CarrinhoService {
         return carrinhoRepository.findAll();
     }
 
-    public void deletarCarrinho(UUID id) throws JsonProcessingException {
-        notifyService.enviarComandoNotificacao("Apagar carrinho");
-
+    public void deletarCarrinho(UUID id)  {
         carrinhoRepository.deleteById(id);
     }
 
