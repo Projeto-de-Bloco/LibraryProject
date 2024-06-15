@@ -24,6 +24,7 @@ public class UsuarioService {
     }
 
     public Usuario criarUsuario(Usuario usuario) throws JsonProcessingException {
+        notifyService.notificar("Criar usuario");
 
         return usuarioRepository.save(usuario);
     }

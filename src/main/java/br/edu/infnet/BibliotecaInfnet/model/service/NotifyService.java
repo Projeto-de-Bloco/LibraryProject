@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 @Service
 public class NotifyService {
-    public void notificar(String subject, String message) throws JsonProcessingException {
+    public void notificar( String message) throws JsonProcessingException {
         Notify notify = new Notify();
         notify.setId(UUID.randomUUID());
-        notify.setSubject(subject);
         notify.setMessage(message);
 
         NotifyAzureServiceBus serviceBus = new NotifyAzureServiceBus();
