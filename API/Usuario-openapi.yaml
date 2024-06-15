@@ -13,192 +13,191 @@ paths:
       summary: "GET api/v1/usuarios"
       operationId: "getAllUsers"
       responses:
-    "200":
-      description: "OK"
-      content:
-        application/json:
-          schema:
-            type: "array"
-            items:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Usuario"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: "POST api/v1/usuarios"
+      operationId: "addUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
               $ref: "#/components/schemas/Usuario"
-    "400":
-      description: "Bad Request"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "401":
-      description: "Unauthorized"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "403":
-      description: "Forbidden"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "404":
-      description: "Not Found"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "500":
-      description: "Internal Server Error"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-post:
-  summary: "POST api/v1/usuarios"
-  operationId: "addUser"
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: "#/components/schemas/Usuario"
-    required: true
-  responses:
-    "201":
-      description: "Created"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Usuario"
-    "400":
-      description: "Bad Request"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "401":
-      description: "Unauthorized"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "403":
-      description: "Forbidden"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "409":
-      description: "Conflict"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-    "500":
-      description: "Internal Server Error"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-/api/v1/usuarios/{id}:
-  get:
-    summary: "GET api/v1/usuarios/{id}"
-    operationId: "getUserById"
-    parameters:
-      -
-      - name: "id"
-        in: "path"
         required: true
-        schema:
-          type: "string"
-          format: "uuid"
-    responses:
-      "200":
-        description: "OK"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Usuario"
-      "400":
-        description: "Bad Request"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "401":
-        description: "Unauthorized"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "403":
-        description: "Forbidden"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "404":
-        description: "Not Found"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "500":
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-  put:
-    summary: "PUT api/v1/usuarios/{id}"
-    operationId: "updateUser"
-    parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-          format: "uuid"
-    requestBody:
-      content:
-        application/json:
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: "Conflict"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/usuarios/{id}:
+    get:
+      summary: "GET api/v1/usuarios/{id}"
+      operationId: "getUserById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
           schema:
-            $ref: "#/components/schemas/Usuario"
-      required: true
-    responses:
-      "200":
-        description: "OK"
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: "PUT api/v1/usuarios/{id}"
+      operationId: "updateUser"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Usuario"
-      "400":
-        description: "Bad Request"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "401":
-        description: "Unauthorized"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "403":
-        description: "Forbidden"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "404":
-        description: "Not Found"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "500":
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       summary: "DELETE api/v1/usuarios/{id}"
       operationId: "deleteUser"
@@ -286,36 +285,53 @@ post:
                   - "BANDWIDTH_LIMIT_EXCEEDED"
                   - "NOT_EXTENDED"
                   - "NETWORK_AUTHENTICATION_REQUIRED"
-      "400":
-        description: "Bad Request"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/usuarios/login:
+    post:
+      summary: "POST api/v1/usuarios/login"
+      operationId: "login"
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "401":
-        description: "Unauthorized"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "403":
-        description: "Forbidden"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "404":
-        description: "Not Found"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
-      "500":
-        description: "Internal Server Error"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: "#/components/schemas/Usuario"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     Emprestimo:
