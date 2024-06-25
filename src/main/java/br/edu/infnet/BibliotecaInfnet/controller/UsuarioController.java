@@ -1,6 +1,7 @@
 package br.edu.infnet.BibliotecaInfnet.controller;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
+import br.edu.infnet.BibliotecaInfnet.model.service.NotifyService;
 import br.edu.infnet.BibliotecaInfnet.model.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.BadRequestException;
@@ -19,6 +20,7 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
 
     @PostMapping("/usuarios")
     public ResponseEntity<Object> criarUsuario(@RequestBody Usuario usuario) {
@@ -78,6 +80,22 @@ public class UsuarioController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao obter usuário por ID: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/usuarios/login")
+    public ResponseEntity<Object> login(@RequestBody Usuario usuario) {
+        try {
+            Usuario user = usuarioService.login(usuario.getEmail(), usuario.getSenha());
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Credenciais inválidas");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao realizar login: " + e.getMessage());
         }
     }
 }

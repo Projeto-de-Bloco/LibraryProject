@@ -8,19 +8,18 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 @Service
 public class NotifyService {
-    public void notificar(String subject, String message) throws JsonProcessingException {
+    public void notificar( String message) throws JsonProcessingException {
         Notify notify = new Notify();
         notify.setId(UUID.randomUUID());
-        notify.setSubject(subject);
         notify.setMessage(message);
 
         NotifyAzureServiceBus serviceBus = new NotifyAzureServiceBus();
         serviceBus.sendMessage(notify);
     }
 
-    public void enviarComandoNotificacao(String acao, String dados) throws JsonProcessingException {
+    public void enviarComandoNotificacao(String acao) throws JsonProcessingException {
         NotifyCommandService commandService = new NotifyCommandService();
-        commandService.enviarComando(acao, dados);
+        commandService.enviarComando(acao);
     }
 
     public void enviarConsultaNotificacao(String criterio) throws JsonProcessingException, com.azure.json.implementation.jackson.core.JsonProcessingException {

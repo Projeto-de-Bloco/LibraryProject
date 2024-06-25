@@ -116,6 +116,70 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/v1/carrinhos/{idCarrinho}/adicionar/{idLivro}:
+    put:
+      summary: "PUT api/v1/carrinhos/{idCarrinho}/adicionar/{idLivro}"
+      operationId: "adicionarLivroNoCarrinho"
+      parameters:
+        - name: "idCarrinho"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+        - name: "idLivro"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Livro adicionado no carrinho com sucesso"
+        "400":
+          description: "Requisição inválida - ID de livro ou carrinho não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/carrinhos/{idCarrinho}/remover/{idLivro}:
+    put:
+      summary: "PUT api/v1/carrinhos/{idCarrinho}/remover/{idLivro}"
+      operationId: "removerLivroDoCarrinho"
+      parameters:
+        - name: "idCarrinho"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+        - name: "idLivro"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Livro removido do carrinho com sucesso"
+        "400":
+          description: "Requisição inválida - ID de livro ou carrinho não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: "Erro interno do servidor"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Emprestimo:

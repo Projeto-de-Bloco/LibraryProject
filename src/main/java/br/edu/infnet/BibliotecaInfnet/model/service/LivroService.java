@@ -1,11 +1,11 @@
 package br.edu.infnet.BibliotecaInfnet.model.service;
 
-import br.edu.infnet.BibliotecaInfnet.exception.LivroNaoDisponivelException;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Emprestimo;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Livro;
 import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.repository.EmprestimoRepository;
 import br.edu.infnet.BibliotecaInfnet.model.repository.LivroRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,13 @@ public class LivroService {
 
     @Autowired
     private LivroRepository livroRepository;
+    @Autowired
+    private NotifyService notifyService;
 
 
-    public Livro criarLivro(Livro livro) {
+    public Livro criarLivro(Livro livro) throws JsonProcessingException {
+        notifyService.enviarComandoNotificacao("livro adicionado com sucesso");
+
         return livroRepository.save(livro);
     }
 
@@ -51,7 +55,9 @@ public class LivroService {
         return livroRepository.findByGenero(genero);
     }
 
-    public void deletarLivro(UUID id) {
+    public void deletarLivro(UUID id) throws JsonProcessingException {
+        notifyService.enviarComandoNotificacao("livro deletado com sucesso");
+
         livroRepository.deleteById(id);
     }
 

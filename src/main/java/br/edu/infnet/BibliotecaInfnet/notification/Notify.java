@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class Notify {
     public UUID id;
-    public String subject;
     public String message;
 
     public UUID getId() {
@@ -19,13 +18,6 @@ public class Notify {
         return message;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
     public void setMessage(String message) {
         this.message = message;

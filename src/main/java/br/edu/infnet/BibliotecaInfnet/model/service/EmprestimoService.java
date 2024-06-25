@@ -7,6 +7,7 @@ import br.edu.infnet.BibliotecaInfnet.model.dto.EmprestimoDto;
 import br.edu.infnet.BibliotecaInfnet.model.repository.EmprestimoRepository;
 import br.edu.infnet.BibliotecaInfnet.model.repository.LivroRepository;
 import br.edu.infnet.BibliotecaInfnet.model.repository.NotificacaoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,17 @@ public class EmprestimoService {
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
-
     @Autowired
     private NotificacaoRepository notificacaoRepository;
     @Autowired
     private LivroRepository livroRepository;
     @Autowired
     private LivroService livroService;
+    @Autowired
+    private NotifyService notifyService;
 
 
-    public Emprestimo criarEmprestimo(EmprestimoDto emprestimoDto) {
+    public Emprestimo criarEmprestimo(EmprestimoDto emprestimoDto) throws JsonProcessingException {
 
         Emprestimo emprestimo = new Emprestimo(UUID.randomUUID(), true, emprestimoDto.getLivro(), emprestimoDto.getUsuario(),
                 LocalDateTime.now().plusDays(7));
@@ -48,6 +50,9 @@ public class EmprestimoService {
 
         notificacaoRepository.save(notificacaoFinalEmprestimo);
         notificacaoRepository.save(notificacao);
+        notifyService.enviarComandoNotificacao("Criar emprestimo");
+
+
 
         return emprestimoSalvo;
 
@@ -100,7 +105,33 @@ public class EmprestimoService {
         }
     }
 
-    public void deletarEmprestimo(UUID id) {
+    public Emprestimo renovarEmprestimo(UUID id) {
+
+        Emprestimo emprestimo = buscarEmprestimoPorId(id);
+        if (emprestimo != null && emprestimo.getAtivo()) {
+
+            emprestimo.setDataVencimento(LocalDateTime.now().plusDays(7));
+            emprestimo = atualizarEmprestimo(emprestimo);
+
+            UUID donoLivro = emprestimo.getLivro().getDono().getId();
+            UUID locatarioLivro = emprestimo.getUsuario().getId();
+            String tituloLivro = emprestimo.getLivro().getTitulo();
+
+            Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
+                "Empréstimo do livro " + tituloLivro + " renovado!",
+                tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
+
+            notificacaoRepository.save(notificacao);
+
+            return emprestimo;
+        } else {
+            return null;
+        }
+    }
+
+    public void deletarEmprestimo(UUID id) throws JsonProcessingException {
+
+        notifyService.enviarComandoNotificacao("Deletar emprestimo");
 
         emprestimoRepository.deleteById(id);
     }

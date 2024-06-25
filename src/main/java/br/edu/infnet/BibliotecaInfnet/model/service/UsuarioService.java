@@ -2,6 +2,7 @@ package br.edu.infnet.BibliotecaInfnet.model.service;
 
 import br.edu.infnet.BibliotecaInfnet.model.domain.Usuario;
 import br.edu.infnet.BibliotecaInfnet.model.repository.UsuarioRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.UUID;
 public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private NotifyService notifyService;
 
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
@@ -20,7 +23,9 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    public Usuario criarUsuario(Usuario usuario) {
+    public Usuario criarUsuario(Usuario usuario) throws JsonProcessingException {
+        notifyService.notificar("Criar usuario");
+
         return usuarioRepository.save(usuario);
     }
 
@@ -34,5 +39,14 @@ public class UsuarioService {
 
     public void deletarUsuario(UUID id) {
         usuarioRepository.deleteById(id);
+    }
+
+    public Usuario login(String email, String password) {
+        Usuario user = usuarioRepository.findByEmail(email).stream().findFirst().orElse(null);
+        if (user != null && user.getSenha().equals(password)) {
+            return user;
+        } else {
+            return null;
+        }
     }
 }
