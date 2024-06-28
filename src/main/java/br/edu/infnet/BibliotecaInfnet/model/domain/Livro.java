@@ -26,7 +26,10 @@ public class Livro {
     private String isbn;
     private String sinopse;
 
-
+    private boolean disponivel;
+    @Getter
+    @Setter
+    private int numeroDeLeituras;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dono_id")
@@ -36,4 +39,9 @@ public class Livro {
     @OneToOne( mappedBy = "livro", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Emprestimo emprestimo;
 
+    public Livro(String titulo, String autor, int numeroDeLeituras) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.numeroDeLeituras = numeroDeLeituras;
 }
+

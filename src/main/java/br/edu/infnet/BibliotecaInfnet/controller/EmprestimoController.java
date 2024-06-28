@@ -161,4 +161,14 @@ public class EmprestimoController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/alunos/{alunoId}/emprestimos")
+    public List<Emprestimo> listarEmprestimosNaoDevolvidos(@PathVariable Long usuarioId) {
+        return bibliotecaService.listarEmprestimosNaoDevolvidos(usuarioId);
+    }
+
+    @PostMapping("/emprestimos/{emprestimoId}/devolver")
+    public void devolverLivro(@PathVariable Long emprestimoId) {
+        bibliotecaService.devolverLivro(emprestimoId);
+    }
 }

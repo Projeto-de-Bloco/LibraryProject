@@ -12,4 +12,14 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
 
     List<Emprestimo> findByUsuarioId(UUID id);
     List<Emprestimo> findByLivroId(UUID id);
+    List<Emprestimo> findByUsuarioIdAndDevolvidoFalse(Long usuarioId);
+
+
+    public void devolverLivro(Long emprestimoId) {
+        Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        emprestimo.setDevolvido(true);
+        emprestimo.getLivro().setDisponivel(true);
+        emprestimoRepository.save(emprestimo);
+        livroRepository.save(emprestimo.getLivro());
+    }
 }

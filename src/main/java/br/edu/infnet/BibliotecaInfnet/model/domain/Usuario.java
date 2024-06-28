@@ -31,14 +31,5 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Emprestimo> emprestimos;
 
-    /*@Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", meusLivros=" + meusLivros +
-                ", emprestimos=" + emprestimos + '}';
-    }*/
+
 }

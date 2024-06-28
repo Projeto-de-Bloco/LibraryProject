@@ -11,6 +11,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +34,9 @@ public class EmprestimoService {
     private LivroService livroService;
     @Autowired
     private NotifyService notifyService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
 
     public Emprestimo criarEmprestimo(EmprestimoDto emprestimoDto) throws JsonProcessingException {
@@ -135,4 +144,16 @@ public class EmprestimoService {
 
         emprestimoRepository.deleteById(id);
     }
+}
+
+private void enviarEmailNotificacao(String para, String assunto, String corpo) {
+   SimpleMailMessage mensagem = new SimpleMailMessage();
+   mensagem.setTo(para);
+   mensagem.setSubject(assunto);
+   mensagem.setText(corpo);
+   mailSender.send(mensagem);
+}
+
+public List<Emprestimo> listarEmprestimosNaoDevolvidos(Long usuarioId) {
+    return emprestimoRepository.findByUsarioIdAndDevolvidoFalse(usuarioId);
 }

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.stereotype.Controller;
+
 import java.util.*;
 
 @RestController
@@ -159,6 +161,13 @@ public class LivroController {
             errorResponse.put("message", "Erro interno do servidor");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/")
+    public String getLivrosPopulares(Model modelo) {
+        List<Livro> livrosPopulares = livroService.getLivrosPopulares();
+        modelo.addAttribute("livrosPopulares", livrosPopulares);
+        return "index";
     }
 
 }

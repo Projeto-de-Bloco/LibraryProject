@@ -36,4 +36,9 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDateTime dataVencimento;
 
+    private boolean devolvido;
+
+    private boolean aprovado;
+    private String status;
+
 }

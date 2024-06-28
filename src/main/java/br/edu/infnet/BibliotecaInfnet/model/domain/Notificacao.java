@@ -36,6 +36,8 @@ public class Notificacao {
                 this.dataNotificacao = now;
                 this.dataLimite = dataVencimento;
         }
+
+        private boolean lida;
 }
 
 

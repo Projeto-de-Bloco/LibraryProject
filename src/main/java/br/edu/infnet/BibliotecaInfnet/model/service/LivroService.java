@@ -21,6 +21,14 @@ public class LivroService {
     @Autowired
     private NotifyService notifyService;
 
+    public List<Livro> getLivrosPopulares() {
+        return Arrays.asList(
+                new Livro("Título do Livro 1", "Autor 1", 150),
+                new Livro("Título do Livro 2", "Autor 2", 120),
+                new Livro("Título do Livro 3", "Autor 3", 200)
+        );
+    }
+
 
     public Livro criarLivro(Livro livro) throws JsonProcessingException {
         notifyService.enviarComandoNotificacao("livro adicionado com sucesso");
@@ -60,6 +68,8 @@ public class LivroService {
 
         livroRepository.deleteById(id);
     }
+
+
 
 
 
