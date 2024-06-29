@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -109,6 +110,7 @@ public class LivroController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/livros/generos/{genero}")
     public ResponseEntity<?> listarLivrosPorGenero(@PathVariable String genero) {
         try {
@@ -164,10 +166,10 @@ public class LivroController {
     }
 
     @GetMapping("/")
-    public String getLivrosPopulares(Model modelo) {
+    public String getLivrosPopulares() {
         List<Livro> livrosPopulares = livroService.getLivrosPopulares();
         modelo.addAttribute("livrosPopulares", livrosPopulares);
-        return "index";
-    }
+        return;
 
+    }
 }

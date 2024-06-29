@@ -51,16 +51,15 @@ public class EmprestimoService {
 
 
         Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
-                "Empréstimo do livro " + tituloLivro + " realizado!" ,
+                "Empréstimo do livro " + tituloLivro + " realizado!",
                 tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
 
         Notificacao notificacaoFinalEmprestimo = new Notificacao(locatarioLivro, donoLivro,
-                "O limite do empréstimo do livro " +tituloLivro+ " acaba amanhã! Fique ligado!", tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento().minusDays(1) );
+                "O limite do empréstimo do livro " + tituloLivro + " acaba amanhã! Fique ligado!", tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento().minusDays(1));
 
         notificacaoRepository.save(notificacaoFinalEmprestimo);
         notificacaoRepository.save(notificacao);
         notifyService.enviarComandoNotificacao("Criar emprestimo");
-
 
 
         return emprestimoSalvo;
@@ -77,8 +76,8 @@ public class EmprestimoService {
         String tituloLivro = emprestimo.getLivro().getTitulo();
 
         Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
-                "Devolução do livro " + tituloLivro + " realizada!" ,
-                tituloLivro, LocalDateTime.now(), null );
+                "Devolução do livro " + tituloLivro + " realizada!",
+                tituloLivro, LocalDateTime.now(), null);
 
 
         notificacaoRepository.save(notificacao);
@@ -127,8 +126,8 @@ public class EmprestimoService {
             String tituloLivro = emprestimo.getLivro().getTitulo();
 
             Notificacao notificacao = new Notificacao(locatarioLivro, donoLivro,
-                "Empréstimo do livro " + tituloLivro + " renovado!",
-                tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
+                    "Empréstimo do livro " + tituloLivro + " renovado!",
+                    tituloLivro, LocalDateTime.now(), emprestimo.getDataVencimento());
 
             notificacaoRepository.save(notificacao);
 
@@ -144,16 +143,17 @@ public class EmprestimoService {
 
         emprestimoRepository.deleteById(id);
     }
-}
 
-private void enviarEmailNotificacao(String para, String assunto, String corpo) {
-   SimpleMailMessage mensagem = new SimpleMailMessage();
-   mensagem.setTo(para);
-   mensagem.setSubject(assunto);
-   mensagem.setText(corpo);
-   mailSender.send(mensagem);
-}
 
-public List<Emprestimo> listarEmprestimosNaoDevolvidos(Long usuarioId) {
-    return emprestimoRepository.findByUsarioIdAndDevolvidoFalse(usuarioId);
+    private void enviarEmailNotificacao(String para, String assunto, String corpo) {
+        SimpleMailMessage mensagem = new SimpleMailMessage();
+        mensagem.setTo(para);
+        mensagem.setSubject(assunto);
+        mensagem.setText(corpo);
+        mailSender.send(mensagem);
+    }
+
+    public List<Emprestimo> listarEmprestimosNaoDevolvidos(Long usuarioId) {
+        return emprestimoRepository.findByUsarioIdAndDevolvidoFalse(usuarioId);
+    }
 }

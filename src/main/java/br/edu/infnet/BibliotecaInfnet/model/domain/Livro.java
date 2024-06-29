@@ -36,12 +36,12 @@ public class Livro {
     private Usuario dono;
 
     @JsonIgnore
-    @OneToOne( mappedBy = "livro", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "livro", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Emprestimo emprestimo;
 
     public Livro(String titulo, String autor, int numeroDeLeituras) {
         this.titulo = titulo;
         this.autor = autor;
         this.numeroDeLeituras = numeroDeLeituras;
+    }
 }
-
